@@ -1,9 +1,11 @@
 package com.nagase.nagasho.myapplayout
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.CalendarView
 import android.widget.LinearLayout
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -16,5 +18,11 @@ class MainActivity : AppCompatActivity() {
         // 親レイアウトに、CalendarViewを追加
         val linearLayout = findViewById<LinearLayout>(R.id.container)
         linearLayout.addView(calendarView)
+
+        val preview = Intent(this,setting::class.java)
+
+        doneButton.setOnClickListener{
+            startActivity(preview)
+        }
     }
 }
