@@ -3,6 +3,7 @@ package com.nagase.nagasho.myapplayout
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.MenuItem
 import android.widget.CalendarView
 import android.widget.LinearLayout
 import kotlinx.android.synthetic.main.activity_main.*
@@ -24,5 +25,17 @@ class MainActivity : AppCompatActivity() {
         doneButton.setOnClickListener{
             startActivity(preview)
         }
+        topAppBar.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.settingicon -> {
+                    startActivity(preview)
+                    // Handle favorite icon press
+                    true
+
+                }
+                else -> false
+            }
+        }
     }
+
 }
