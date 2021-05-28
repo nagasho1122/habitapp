@@ -28,9 +28,8 @@
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-
     <LinearLayout
-        android:id="@+id/linearLayoutsetting1"
+        android:id="@+id/linearLayoutsetting3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="75dp"
@@ -38,37 +37,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-
-        <TextView
-            android:id="@+id/themeSettingMokuhyo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif"
-            android:text="目標 :"
-            android:textColor="#000000"
-            android:textSize="20sp" />
-
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-condensed-medium"
-            android:text="目標が入る"
-            android:maxLines="2"
-            android:textColor="#000000"
-            android:textSize="20sp" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/linearLayoutsetting3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayoutsetting1">
 
         <TextView
             android:id="@+id/themeSettingMokuteki"
@@ -84,10 +52,40 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-condensed-medium"
-            android:text="目的が入る"
             android:maxLines="2"
             android:textColor="#000000"
             android:textSize="20sp" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/linearLayoutsetting1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayoutsetting3">
+
+        <TextView
+            android:id="@+id/themeSettingMokuhyo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:text="目標 :"
+            android:textColor="#000000"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-condensed-medium"
+            android:maxLines="2"
+            android:textColor="#000000"
+            android:textSize="20sp" />
+
     </LinearLayout>
 
     <LinearLayout
@@ -97,7 +95,7 @@
         android:layout_marginTop="20dp"
         android:gravity="center"
         android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayoutsetting3"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayoutsetting1"
         tools:layout_editor_absoluteX="16dp">
 
         <TextView

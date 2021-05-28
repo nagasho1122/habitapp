@@ -1,5 +1,6 @@
 package com.nagase.nagasho.myapplayout
 
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.Color.BLACK
 import androidx.appcompat.app.AppCompatActivity
@@ -8,6 +9,8 @@ import android.view.View
 import androidx.appcompat.app.AlertDialog
 import com.google.android.material.snackbar.Snackbar
 import io.realm.Realm
+import io.realm.kotlin.delete
+import io.realm.log.RealmLog.error
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main.topAppBar
 import kotlinx.android.synthetic.main.activity_setting.*
@@ -16,18 +19,44 @@ import kotlin.toString as toString1
 class setting : AppCompatActivity() {
 
     val realm: Realm = Realm.getDefaultInstance()
+    val data: Data? = read()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_setting)
         nottexteditable()
 
-        var goal = intent.getStringExtra("goal")
-        var target = intent.getStringExtra("target")
-        var frequent = intent.getStringExtra("frequency")
-        var duration = intent.getStringExtra("duration")
+        var goal = data?.goal
+        var target = data?.target
+        var frequent = data?.frequent
+        var duration = data?.duration
+        var first = intent.getBooleanExtra("first",false)
         var state:String=""
 
+
+        val mainintent = Intent(this,MainActivity::class.java)
+
+        if(first){
+            texteditable()
+            decideButtonswitch(true)
+            failButtonswitch(false)
+            achieveButtonswitch(false)
+            editButtonswitch(false)
+            state="習慣を設定しました。"
+            AlertDialog.Builder(this)
+                .setTitle("習慣を設定しましょう")
+                .setMessage("""
+                    |目的と目標を明確にすることでモチベーションを持続できます。
+                    |習慣頻度と期間を選択することで記録を可視化できます。
+                    |目的と目標の違いは以下を参考にしてください。
+                    |目的:健康になる
+                    |目標:腹筋バキバキ
+                    """.trimMargin())
+                .setPositiveButton("習慣化を初める") { dialog, which ->
+                    // Respond to positive button press
+                }
+                .show()
+        }
 
         if (goal != null) {
             targetText.setText(target)
@@ -60,12 +89,22 @@ class setting : AppCompatActivity() {
             var edittarget=targetText.text.toString1()
             var editfrequent=frequencyText.text.toString()
             var editduration = durationText.text.toString()
-            save(editgoal, edittarget, editfrequent, editduration,state)
-            nottexteditable()
-            decideButtonswitch(false)
-            failButtonswitch(true)
-            achieveButtonswitch(true)
-            editButtonswitch(true)
+            if(editgoal.isNullOrBlank() or edittarget.isNullOrBlank() or editfrequent.isNullOrBlank() or editduration.isNullOrBlank()){
+                AlertDialog.Builder(this)
+                    .setTitle("空欄があります")
+                    .setMessage("必要な項目をすべて入力してください。")
+                    .setPositiveButton("戻る") { dialog, which ->
+                        // Respond to positive button press
+                    }
+                    .show()
+            }else {
+                save(editgoal, edittarget, editfrequent, editduration, state)
+                nottexteditable()
+                decideButtonswitch(false)
+                failButtonswitch(true)
+                achieveButtonswitch(true)
+                editButtonswitch(true)
+            }
         }
 
         failButton.setOnClickListener{
@@ -83,6 +122,13 @@ class setting : AppCompatActivity() {
                     achieveButtonswitch(false)
                     editButtonswitch(false)
                     state="新たな習慣を設定しました。今度こそ頑張ろう！"
+                    realm.beginTransaction()
+                    realm.deleteAll()
+                    realm.commitTransaction()
+                    targetText.setText("")
+                    goalText.setText("")
+                    frequencyText.setText("")
+                    durationText.setText("")
                 }
                 .show()
         }
@@ -108,6 +154,7 @@ class setting : AppCompatActivity() {
 
 
         topAppBar.setNavigationOnClickListener {
+            startActivity(mainintent)
             finish()
             // Handle navigation icon press
         }

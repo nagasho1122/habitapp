@@ -18,10 +18,20 @@ class MainActivity : AppCompatActivity() {
 
         //データの読み込み
         val data: Data? = read()
+        val preview = Intent(this,setting::class.java)
 
-        if (data != null) {
+        if (data?.goal != null) {
             textView2.text = data.target
             textView3.text = data.goal
+        }else{
+            preview.putExtra("first",true)
+            startActivity(preview)
+            finish()
+        }
+        if(data?.goal == ""){
+            preview.putExtra("first",true)
+            startActivity(preview)
+            finish()
         }
 
         val calendarView = CalendarView(this)
@@ -31,7 +41,6 @@ class MainActivity : AppCompatActivity() {
         val linearLayout = findViewById<LinearLayout>(R.id.containerSetting)
         linearLayout.addView(calendarView)
 
-        val preview = Intent(this,setting::class.java)
 
         doneButton.setOnClickListener{
             startActivity(preview)
@@ -40,11 +49,8 @@ class MainActivity : AppCompatActivity() {
         topAppBar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.settingicon -> {
-                    preview.putExtra("goal",data?.goal)
-                    preview.putExtra("target",data?.target)
-                    preview.putExtra("frequency",data?.frequent)
-                    preview.putExtra("duration",data?.duration)
                     startActivity(preview)
+                    finish()
                     // Handle favorite icon press
                     true
 
