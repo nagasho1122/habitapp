@@ -45,7 +45,6 @@ class MainActivity : AppCompatActivity() {
                     preview.putExtra("frequency",data?.frequent)
                     preview.putExtra("duration",data?.duration)
                     startActivity(preview)
-                    finish()
                     // Handle favorite icon press
                     true
 

@@ -22,13 +22,13 @@ class setting : AppCompatActivity() {
         setContentView(R.layout.activity_setting)
         nottexteditable()
 
-        val goal = intent.getStringExtra("goal")
-        val target = intent.getStringExtra("target")
-        val frequent = intent.getStringExtra("frequency")
-        val duration = intent.getStringExtra("duration")
+        var goal = intent.getStringExtra("goal")
+        var target = intent.getStringExtra("target")
+        var frequent = intent.getStringExtra("frequency")
+        var duration = intent.getStringExtra("duration")
 
 
-        if (goal != "0") {
+        if (goal != null) {
             targetText.setText(target)
             goalText.setText(goal)
             frequencyText.setText(frequent)
@@ -45,8 +45,10 @@ class setting : AppCompatActivity() {
                 .setPositiveButton("はい") { dialog, which ->
                     // Respond to positive button press
                     texteditable()
-                    decideButton.isEnabled=true
-                    decideButton.background=getDrawable(R.drawable.background_circle_enable)
+                    decideButtonswitch(true)
+                    failButtonswitch(false)
+                    achieveButtonswitch(false)
+                    editButtonswitch(false)
                 }
                 .show()
         }
@@ -58,8 +60,49 @@ class setting : AppCompatActivity() {
             var editduration = durationText.text.toString()
             save(editgoal, edittarget, editfrequent, editduration)
             nottexteditable()
+            decideButtonswitch(false)
+            failButtonswitch(true)
+            achieveButtonswitch(true)
+            editButtonswitch(true)
         }
 
+        failButton.setOnClickListener{
+            AlertDialog.Builder(this)
+                .setTitle("失敗しましたか？")
+                .setMessage("記録が消去され、新たに各項目を設定します。")
+                .setNegativeButton("いいえ") { dialog, which ->
+                    // Respond to negative button press
+                }
+                .setPositiveButton("はい") { dialog, which ->
+                    // Respond to positive button press
+                    texteditable()
+                    decideButtonswitch(true)
+                    failButtonswitch(false)
+                    achieveButtonswitch(false)
+                    editButtonswitch(false)
+
+                }
+                .show()
+        }
+
+        achieveButton.setOnClickListener{
+            AlertDialog.Builder(this)
+                .setTitle("目標を達成しましたか？")
+                .setMessage("記録を保持し、新たな習慣化を設定しましょう！")
+                .setNegativeButton("いいえ") { dialog, which ->
+                    // Respond to negative button press
+                }
+                .setPositiveButton("はい") { dialog, which ->
+                    // Respond to positive button press
+                    texteditable()
+                    decideButtonswitch(true)
+                    failButtonswitch(false)
+                    achieveButtonswitch(false)
+                    editButtonswitch(false)
+
+                }
+                .show()
+        }
 
 
         topAppBar.setNavigationOnClickListener {
@@ -111,5 +154,41 @@ class setting : AppCompatActivity() {
         goalText.setTextColor(Color.BLACK)
         frequencyText.setTextColor(Color.BLACK)
         durationText.setTextColor(Color.BLACK)
+    }
+    private fun failButtonswitch(bool:Boolean){
+        if(bool){
+            failButton.isEnabled=true
+            failButton.background=getDrawable(R.drawable.background_circle3)
+        }else{
+            failButton.isEnabled=false
+            failButton.background=getDrawable(R.drawable.background_circle5)
+        }
+    }
+    private  fun achieveButtonswitch(bool:Boolean){
+        if(bool){
+            achieveButton.isEnabled=true
+            achieveButton.background=getDrawable(R.drawable.background_circle)
+        }else{
+            achieveButton.isEnabled=false
+            achieveButton.background=getDrawable(R.drawable.background_circle5)
+        }
+    }
+    private  fun decideButtonswitch(bool:Boolean){
+        if(bool){
+            decideButton.isEnabled=true
+            decideButton.background=getDrawable(R.drawable.background_circle_enable)
+        }else{
+            decideButton.isEnabled=false
+            decideButton.background=getDrawable(R.drawable.background_circle5)
+        }
+    }
+    private fun editButtonswitch(bool:Boolean){
+        if(bool){
+            editButton.isEnabled=true
+            editButton.background=getDrawable(R.drawable.background_circle2)
+        }else{
+            editButton.isEnabled=false
+            editButton.background=getDrawable(R.drawable.background_circle5)
+        }
     }
 }
