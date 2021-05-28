@@ -1,18 +1,16 @@
 package com.nagase.nagasho.myapplayout
 
-import android.content.Context
-import android.content.Intent
+import android.graphics.Color
+import android.graphics.Color.BLACK
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.InputType
+import android.view.View
 import androidx.appcompat.app.AlertDialog
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main.topAppBar
 import kotlinx.android.synthetic.main.activity_setting.*
-import kotlinx.android.synthetic.main.activity_setting.view.*
 import kotlin.toString as toString1
 
 class setting : AppCompatActivity() {
@@ -22,19 +20,19 @@ class setting : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_setting)
-        targetText.isEnabled=false
-        goalText.isEnabled=false
-        frequencyText.isEnabled=false
-        durationText.isEnabled=false
+        nottexteditable()
+
+        val goal = intent.getStringExtra("goal")
+        val target = intent.getStringExtra("target")
+        val frequent = intent.getStringExtra("frequency")
+        val duration = intent.getStringExtra("duration")
 
 
-        val data: Data? = read()
-
-        if (data != null) {
-            targetText.hint = data.target
-            goalText.hint = data.goal
-            frequencyText.hint = data.frequency.toString()
-            durationText.hint = data.duration.toString()
+        if (goal != "0") {
+            targetText.setText(target)
+            goalText.setText(goal)
+            frequencyText.setText(frequent)
+            durationText.setText(duration)
         }
 
         editButton.setOnClickListener{ //編集の処理
@@ -54,15 +52,13 @@ class setting : AppCompatActivity() {
         }
 
         decideButton.setOnClickListener{
-            val goal: String = goalText.text.toString1()
-            val target: String = targetText.text.toString1()
-            val frequency: Int = frequencyText.text.toString().toInt()
-            val duration: Int = durationText.text.toString().toInt()
-            save(goal, target, frequency, duration)
-            println(data)
+            var editgoal = goalText.text.toString1()
+            var edittarget=targetText.text.toString1()
+            var editfrequent=frequencyText.text.toString()
+            var editduration = durationText.text.toString()
+            save(editgoal, edittarget, editfrequent, editduration)
+            nottexteditable()
         }
-
-
 
 
 
@@ -79,25 +75,25 @@ class setting : AppCompatActivity() {
         return realm.where(Data::class.java).findFirst()
     }
 
-    fun save(goal: String, target: String, frequency: Int,duration: Int){
+    fun save(goal: String, target: String, frequent: String,duration: String){
         val data: Data? = read()
 
-        realm.executeTransaction { //データベースへの書き込み
-
+        realm.executeTransaction {
+            //データベースへの書き込み
             if (data != null) {
                 data.goal = goal
                 data.target = target
-                data.frequency = frequency
+                data.frequent = frequent
                 data.duration = duration
             } else {
                 val newdata: Data = it.createObject(Data::class.java) //保存するデータの新規作成
                 newdata.goal = goal
                 newdata.target = target
-                newdata.frequency = frequency
+                newdata.frequent = frequent
                 newdata.duration = duration
             }
 
-            Snackbar.make(container,"編集しました", Snackbar.LENGTH_SHORT).show() //表示する長さ等の設定
+            Snackbar.make(buttons,"編集しました", Snackbar.LENGTH_SHORT).show() //表示する長さ等の設定
         }
     }
     private fun texteditable(){
@@ -105,5 +101,15 @@ class setting : AppCompatActivity() {
         goalText.isEnabled= true
         frequencyText.isEnabled= true
         durationText.isEnabled= true
+    }
+    private fun nottexteditable(){
+        targetText.isEnabled= false
+        goalText.isEnabled= false
+        frequencyText.isEnabled= false
+        durationText.isEnabled= false
+        targetText.setTextColor(Color.BLACK)
+        goalText.setTextColor(Color.BLACK)
+        frequencyText.setTextColor(Color.BLACK)
+        durationText.setTextColor(Color.BLACK)
     }
 }

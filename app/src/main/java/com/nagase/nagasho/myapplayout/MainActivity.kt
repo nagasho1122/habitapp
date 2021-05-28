@@ -3,12 +3,9 @@ package com.nagase.nagasho.myapplayout
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.MenuItem
 import android.widget.CalendarView
 import android.widget.LinearLayout
 import io.realm.Realm
-import io.realm.RealmResults
-import io.realm.kotlin.where
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -22,11 +19,16 @@ class MainActivity : AppCompatActivity() {
         //データの読み込み
         val data: Data? = read()
 
+        if (data != null) {
+            textView2.text = data.target
+            textView3.text = data.goal
+        }
+
         val calendarView = CalendarView(this)
         calendarView.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
 
         // 親レイアウトに、CalendarViewを追加
-        val linearLayout = findViewById<LinearLayout>(R.id.container)
+        val linearLayout = findViewById<LinearLayout>(R.id.containerSetting)
         linearLayout.addView(calendarView)
 
         val preview = Intent(this,setting::class.java)
@@ -38,7 +40,12 @@ class MainActivity : AppCompatActivity() {
         topAppBar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.settingicon -> {
+                    preview.putExtra("goal",data?.goal)
+                    preview.putExtra("target",data?.target)
+                    preview.putExtra("frequency",data?.frequent)
+                    preview.putExtra("duration",data?.duration)
                     startActivity(preview)
+                    finish()
                     // Handle favorite icon press
                     true
 
@@ -47,10 +54,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        if (data != null) {
-            textView2.text = data.target
-            textView3.text = data.goal
-        }
     }
     //画面が閉じられるときにデータを保存
     override fun onDestroy() {
