@@ -26,6 +26,7 @@ class setting : AppCompatActivity() {
         var target = intent.getStringExtra("target")
         var frequent = intent.getStringExtra("frequency")
         var duration = intent.getStringExtra("duration")
+        var state:String=""
 
 
         if (goal != null) {
@@ -49,6 +50,7 @@ class setting : AppCompatActivity() {
                     failButtonswitch(false)
                     achieveButtonswitch(false)
                     editButtonswitch(false)
+                    state="編集されました。"
                 }
                 .show()
         }
@@ -58,7 +60,7 @@ class setting : AppCompatActivity() {
             var edittarget=targetText.text.toString1()
             var editfrequent=frequencyText.text.toString()
             var editduration = durationText.text.toString()
-            save(editgoal, edittarget, editfrequent, editduration)
+            save(editgoal, edittarget, editfrequent, editduration,state)
             nottexteditable()
             decideButtonswitch(false)
             failButtonswitch(true)
@@ -80,7 +82,7 @@ class setting : AppCompatActivity() {
                     failButtonswitch(false)
                     achieveButtonswitch(false)
                     editButtonswitch(false)
-
+                    state="新たな習慣を設定しました。今度こそ頑張ろう！"
                 }
                 .show()
         }
@@ -88,7 +90,7 @@ class setting : AppCompatActivity() {
         achieveButton.setOnClickListener{
             AlertDialog.Builder(this)
                 .setTitle("目標を達成しましたか？")
-                .setMessage("記録を保持し、新たな習慣化を設定しましょう！")
+                .setMessage("記録を保持し、新たな習慣を設定しましょう！")
                 .setNegativeButton("いいえ") { dialog, which ->
                     // Respond to negative button press
                 }
@@ -99,7 +101,7 @@ class setting : AppCompatActivity() {
                     failButtonswitch(false)
                     achieveButtonswitch(false)
                     editButtonswitch(false)
-
+                    state="新たな習慣を設定しました。今回も頑張ろう！"
                 }
                 .show()
         }
@@ -118,7 +120,7 @@ class setting : AppCompatActivity() {
         return realm.where(Data::class.java).findFirst()
     }
 
-    fun save(goal: String, target: String, frequent: String,duration: String){
+    fun save(goal: String, target: String, frequent: String,duration: String,text: String){
         val data: Data? = read()
 
         realm.executeTransaction {
@@ -136,7 +138,7 @@ class setting : AppCompatActivity() {
                 newdata.duration = duration
             }
 
-            Snackbar.make(buttons,"編集しました", Snackbar.LENGTH_SHORT).show() //表示する長さ等の設定
+            Snackbar.make(buttons,text, Snackbar.LENGTH_SHORT).show() //表示する長さ等の設定
         }
     }
     private fun texteditable(){
