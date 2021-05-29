@@ -20,6 +20,7 @@ class setting : AppCompatActivity() {
 
     val realm: Realm = Realm.getDefaultInstance()
     val data: Data? = read()
+    val datedata: dateData? = readdate()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -165,6 +166,10 @@ class setting : AppCompatActivity() {
     }
     fun read(): Data? {
         return realm.where(Data::class.java).findFirst()
+    }
+
+    fun readdate(): dateData? {
+        return realm.where(dateData::class.java).findFirst()
     }
 
     fun save(goal: String, target: String, frequent: String,duration: String,text: String){

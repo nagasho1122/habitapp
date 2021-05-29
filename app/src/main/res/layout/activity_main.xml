@@ -99,7 +99,7 @@
         tools:layout_editor_absoluteX="16dp">
 
         <TextView
-            android:id="@+id/textViewkai2"
+            android:id="@+id/habitNumber"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="7"
