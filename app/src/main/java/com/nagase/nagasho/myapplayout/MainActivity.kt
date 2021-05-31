@@ -8,36 +8,94 @@ import android.util.Log
 import android.widget.CalendarView
 import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
-import com.google.android.material.snackbar.Snackbar
 import io.realm.Realm
 import io.realm.kotlin.createObject
 import io.realm.kotlin.where
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main.topAppBar
 import kotlinx.android.synthetic.main.activity_setting.*
+import java.text.SimpleDateFormat
 import java.time.LocalDate
+import java.util.*
+import android.graphics.Color
+import androidx.core.content.ContextCompat
+import net.soft.vrg.flexiblecalendar.CalendarDay
+import net.soft.vrg.flexiblecalendar.FlexibleCalendarView
+import net.soft.vrg.flexiblecalendar.calendar_listeners.FlexibleCalendarMonthCallback
+import net.soft.vrg.flexiblecalendar.calendar_listeners.OnCalendarClickListener
+import net.soft.vrg.flexiblecalendar.calendar_listeners.OnCalendarLongClickListener
+import java.time.Period
+import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(),  FlexibleCalendarMonthCallback {
 
+    //------calendarsetting------
+    private lateinit var flexibleCalendarView: FlexibleCalendarView
+    private val df = SimpleDateFormat("yyyy-MMMM", Locale.getDefault())
+    //------calendarsettingfinish------
     val realm: Realm = Realm.getDefaultInstance()
+    var habitdates = mutableListOf<Int>()
+
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        //realm.deleteAll()
+
+        //------calendarsetting------
+        flexibleCalendarView = findViewById(R.id.calendar)
+        flexibleCalendarView.getSettings()
+            .setCalendarMonthCallback(this)
+
+        flexibleCalendarView.setDateFormat(df)
+        flexibleCalendarView.getDayOfWeekTextView(FlexibleCalendarView.TUESDAY)
+            .setTextColor(Color.BLACK)
+        flexibleCalendarView.getDayOfWeekTextView(FlexibleCalendarView.WEDNESDAY)
+            .setTextColor(Color.BLACK)
+        flexibleCalendarView.getDayOfWeekTextView(FlexibleCalendarView.FRIDAY)
+            .setTextColor(Color.BLACK)
+        flexibleCalendarView.getDayOfWeekTextView(FlexibleCalendarView.SUNDAY)
+            .setTextColor(Color.BLACK)
+        flexibleCalendarView.getDayOfWeekTextView(FlexibleCalendarView.MONDAY)
+            .setTextColor(Color.BLACK)
+        flexibleCalendarView.getDayOfWeekTextView(FlexibleCalendarView.THURSDAY)
+            .setTextColor(Color.BLACK)
+        flexibleCalendarView.getDayOfWeekTextView(FlexibleCalendarView.SATURDAY)
+            .setTextColor(Color.BLACK)
+        flexibleCalendarView.weekContainer()
+            .setBackgroundColor(ContextCompat.getColor(this, R.color.colorTitle))
+        flexibleCalendarView.titleContainer()
+            .setBackgroundColor(ContextCompat.getColor(this, R.color.colorTitle))
+        //------calendarsettingfinish------
+
+
 
         //データの読み込み
         val data: Data? = read()
         var datedata: dateData? = readdate()
-        val preview = Intent(this,setting::class.java)
+        val preview = Intent(this, setting::class.java)
         var todaydate: LocalDate = LocalDate.now()
         var realmtodaysdata = realm.where<allData>()
-                .equalTo("date",todaydate.toString())
-                .findAll()
+            .equalTo("date", todaydate.toString())
+            .findAll()
+        var realmhabitdata = realm.where<allData>()
+            .findAll()
 
-        if (realmtodaysdata.size != 0 ){
+
+        //------calendar add image-------
+        for (habitdata in realmhabitdata){
+            var achievedate = LocalDate.parse(habitdata.date, DateTimeFormatter.ISO_DATE)
+            var period = ChronoUnit.DAYS.between(todaydate,achievedate).toInt()
+            habitdates.add(period)
+            println(habitdates)
+        }
+
+        if (realmtodaysdata.size != 0) {
             doneButtonswitch(false)
-        }else{
+        } else {
             doneButtonswitch(true)
         }
 
@@ -45,18 +103,22 @@ class MainActivity : AppCompatActivity() {
         if (data?.goal != null) {
             textView2.text = data.target
             textView3.text = data.goal
-        }else{
-            preview.putExtra("first",true)
+        } else {
+            preview.putExtra("first", true)
             startActivity(preview)
             finish()
         }
-        if(data?.goal == ""){
-            preview.putExtra("first",true)
+        if (data?.goal == "") {
+            preview.putExtra("first", true)
             startActivity(preview)
             finish()
         }
+
         //回数出力
-        if(datedata != null){
+        if (datedata != null ) {
+            if(datedata.habitnumber ==0){
+                doneButtonswitch(true)
+            }
             habitNumber.text = datedata.habitnumber.toString()
         }else{
             savenumber(0)
@@ -69,10 +131,6 @@ class MainActivity : AppCompatActivity() {
 
         val calendarView = CalendarView(this)
         calendarView.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-
-        // 親レイアウトに、CalendarViewを追加
-        val linearLayout = findViewById<LinearLayout>(R.id.containerSetting)
-        linearLayout.addView(calendarView)
 
 
         doneButton.setOnClickListener{
@@ -90,6 +148,8 @@ class MainActivity : AppCompatActivity() {
             var today: LocalDate = LocalDate.now()
             insertData(data!!.goal, data!!.target, data!!.frequent, data!!.duration, today.toString())
             doneButtonswitch(false)
+
+
         }
         //Appbarの設定ページへ飛ぶ処理
         topAppBar.setOnMenuItemClickListener { menuItem ->
@@ -111,6 +171,16 @@ class MainActivity : AppCompatActivity() {
         super.onDestroy()
         realm.close()
     }
+
+    //------calendarsetting------
+    override fun getCustomizeDayView(calendar: Calendar): List<CalendarDay> {
+
+        val customDayUtils = CustomDayUtils()
+
+        return customDayUtils.getCustomizeDayView(this,habitdates)
+    }
+    //------calendarsettingfinish------
+
     fun read(): Data? {
         return realm.where(Data::class.java).findFirst()
     }

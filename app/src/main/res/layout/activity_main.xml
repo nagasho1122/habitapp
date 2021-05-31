@@ -137,13 +137,25 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayoutsetting2" />
 
-    <LinearLayout
-        android:id="@+id/containerSetting"
+    <net.soft.vrg.flexiblecalendar.FlexibleCalendarView
+        android:id="@+id/calendar"
         android:layout_width="match_parent"
-        android:layout_height="350dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:context=".MainActivity"></LinearLayout>
+        android:layout_height="wrap_content"
+        android:scaleX="0.8"
+        android:scaleY="0.8"
+        android:translationY="30dp"
+        app:fcv_background_color="@android:color/white"
+        app:fcv_calendar_day_text_size="15sp"
+        app:fcv_current_day_text_color="@android:color/holo_blue_dark"
+        app:fcv_current_month_text_color="@android:color/black"
+        app:fcv_current_month_other_days_text_color="@android:color/darker_gray"
+        app:fcv_next_button="@drawable/ic_next_button_example2"
+        app:fcv_other_month_text_color="@android:color/black"
+        app:fcv_previous_button="@drawable/ic_previous2"
+        app:fcv_title_text_color="@android:color/black"
+        app:fcv_week_days_color="@android:color/darker_gray"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
