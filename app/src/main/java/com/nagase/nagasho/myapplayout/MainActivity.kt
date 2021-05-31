@@ -1,20 +1,27 @@
 package com.nagase.nagasho.myapplayout
 
 import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.CalendarView
 import android.widget.LinearLayout
+import androidx.annotation.RequiresApi
 import com.google.android.material.snackbar.Snackbar
 import io.realm.Realm
+import io.realm.kotlin.createObject
+import io.realm.kotlin.where
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main.topAppBar
 import kotlinx.android.synthetic.main.activity_setting.*
+import java.time.LocalDate
 
 class MainActivity : AppCompatActivity() {
 
     val realm: Realm = Realm.getDefaultInstance()
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -23,6 +30,16 @@ class MainActivity : AppCompatActivity() {
         val data: Data? = read()
         var datedata: dateData? = readdate()
         val preview = Intent(this,setting::class.java)
+        var todaydate: LocalDate = LocalDate.now()
+        var realmtodaysdata = realm.where<allData>()
+                .equalTo("date",todaydate.toString())
+                .findAll()
+
+        if (realmtodaysdata.size != 0){
+            doneButtonswitch(false)
+        }else{
+            doneButtonswitch(true)
+        }
 
         //データから目的と目標を出力
         if (data?.goal != null) {
@@ -70,6 +87,9 @@ class MainActivity : AppCompatActivity() {
                 savenumber(nownum)
                 habitNumber.text=nownum.toString()
             }
+            var today: LocalDate = LocalDate.now()
+            insertData(data!!.goal, data!!.target, data!!.frequent, data!!.duration, today.toString())
+            doneButtonswitch(false)
         }
         //Appbarの設定ページへ飛ぶ処理
         topAppBar.setOnMenuItemClickListener { menuItem ->
@@ -108,6 +128,28 @@ class MainActivity : AppCompatActivity() {
                 val newdata: dateData = it.createObject(dateData::class.java) //保存するデータの新規作成
                 newdata.habitnumber = number
             }
+        }
+    }
+    fun insertData(goal: String, target: String, frequent: String,duration: String,data:String){
+        realm.executeTransaction{
+            var id = realm.where<allData>().max("id")
+            var nextId = (id?.toLong() ?:  0)+1
+            var realmObject1 = realm.createObject<allData>(nextId)
+                    realmObject1.date=data
+                    realmObject1.goal=goal
+                    realmObject1.target=target
+                    realmObject1.duration=duration
+                    realmObject1.frequent=frequent
+        }
+        Log.d("Realminsert","result:${realm.where<allData>().findAll()}")
+    }
+    private  fun doneButtonswitch(bool:Boolean){
+        if(bool){
+            doneButton.isEnabled=true
+            doneButton.background=getDrawable(R.drawable.background_circle)
+        }else{
+            doneButton.isEnabled=false
+            doneButton.background=getDrawable(R.drawable.background_circle5)
         }
     }
 }

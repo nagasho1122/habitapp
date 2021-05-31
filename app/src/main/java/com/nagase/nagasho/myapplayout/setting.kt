@@ -126,10 +126,7 @@ class setting : AppCompatActivity() {
                     realm.beginTransaction()
                     realm.deleteAll()
                     realm.commitTransaction()
-                    targetText.setText("")
-                    goalText.setText("")
-                    frequencyText.setText("")
-                    durationText.setText("")
+                    textclean()
                 }
                 .show()
         }
@@ -144,6 +141,7 @@ class setting : AppCompatActivity() {
                 .setPositiveButton("はい") { dialog, which ->
                     // Respond to positive button press
                     texteditable()
+                    textclean()
                     decideButtonswitch(true)
                     failButtonswitch(false)
                     achieveButtonswitch(false)
@@ -198,6 +196,12 @@ class setting : AppCompatActivity() {
         goalText.isEnabled= true
         frequencyText.isEnabled= true
         durationText.isEnabled= true
+    }
+    private fun textclean(){
+        targetText.setText("")
+        goalText.setText("")
+        frequencyText.setText("")
+        durationText.setText("")
     }
     private fun nottexteditable(){
         targetText.isEnabled= false
