@@ -77,6 +77,7 @@ class MainActivity : AppCompatActivity(),  FlexibleCalendarMonthCallback {
         val data: Data? = read()
         var datedata: dateData? = readdate()
         val preview = Intent(this, setting::class.java)
+        val doneaction = Intent(this,doneaction::class.java)
         var todaydate: LocalDate = LocalDate.now()
         var realmtodaysdata = realm.where<allData>()
             .equalTo("date", todaydate.toString())
@@ -148,8 +149,8 @@ class MainActivity : AppCompatActivity(),  FlexibleCalendarMonthCallback {
             var today: LocalDate = LocalDate.now()
             insertData(data!!.goal, data!!.target, data!!.frequent, data!!.duration, today.toString())
             doneButtonswitch(false)
-
-
+            startActivity(doneaction)
+            finish()
         }
         //Appbarの設定ページへ飛ぶ処理
         topAppBar.setOnMenuItemClickListener { menuItem ->
