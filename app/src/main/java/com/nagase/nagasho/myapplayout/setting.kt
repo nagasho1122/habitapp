@@ -5,11 +5,13 @@ import android.graphics.Color
 import android.graphics.Color.BLACK
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import com.google.android.material.snackbar.Snackbar
 import io.realm.Realm
 import io.realm.kotlin.delete
+import io.realm.kotlin.where
 import io.realm.log.RealmLog.error
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main.topAppBar
@@ -123,9 +125,8 @@ class setting : AppCompatActivity() {
                     achieveButtonswitch(false)
                     editButtonswitch(false)
                     state="新たな習慣を設定しました。今度こそ頑張ろう！"
-                    realm.beginTransaction()
-                    realm.deleteAll()
-                    realm.commitTransaction()
+                    deleteData()
+                    deletedateData()
                     textclean()
                 }
                 .show()
@@ -190,6 +191,19 @@ class setting : AppCompatActivity() {
 
             Snackbar.make(buttons,text, Snackbar.LENGTH_SHORT).show() //表示する長さ等の設定
         }
+    }
+    fun deleteData(){
+        realm.beginTransaction()
+        var target = realm.where<Data>().findAll()
+        target.deleteAllFromRealm()
+        Log.d("RealmDelete", "deletePartRealm:${realm.where<Data>().findAll()}")
+        realm.commitTransaction()
+    }
+    fun deletedateData(){
+        realm.beginTransaction()
+        var target2 = realm.where<dateData>().findAll()
+        target2.deleteAllFromRealm()
+        realm.commitTransaction()
     }
     private fun texteditable(){
         targetText.isEnabled= true

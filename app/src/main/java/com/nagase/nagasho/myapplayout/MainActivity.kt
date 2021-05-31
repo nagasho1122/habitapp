@@ -35,7 +35,7 @@ class MainActivity : AppCompatActivity() {
                 .equalTo("date",todaydate.toString())
                 .findAll()
 
-        if (realmtodaysdata.size != 0){
+        if (realmtodaysdata.size != 0 ){
             doneButtonswitch(false)
         }else{
             doneButtonswitch(true)
@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity() {
             habitNumber.text = datedata.habitnumber.toString()
         }else{
             savenumber(0)
-
+            doneButtonswitch(true)
             habitNumber.text="0"
         }
 
