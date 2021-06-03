@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity(),  FlexibleCalendarMonthCallback {
 
     //------calendarsetting------
     private lateinit var flexibleCalendarView: FlexibleCalendarView
-    private val df = SimpleDateFormat("yyyy-MMMM", Locale.getDefault())
+    private val df = SimpleDateFormat("yyyy年-MMMM", Locale.getDefault())
     //------calendarsettingfinish------
     val realm: Realm = Realm.getDefaultInstance()
     var habitdates = mutableListOf<Int>()
@@ -43,61 +43,70 @@ class MainActivity : AppCompatActivity(),  FlexibleCalendarMonthCallback {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        //realm.deleteAll()
 
         //------calendarsetting------
         flexibleCalendarView = findViewById(R.id.calendar)
         flexibleCalendarView.getSettings()
-            .setCalendarMonthCallback(this)
+                .setCalendarMonthCallback(this)
 
         flexibleCalendarView.setDateFormat(df)
         flexibleCalendarView.getDayOfWeekTextView(FlexibleCalendarView.TUESDAY)
-            .setTextColor(Color.BLACK)
+                .setTextColor(Color.BLACK)
         flexibleCalendarView.getDayOfWeekTextView(FlexibleCalendarView.WEDNESDAY)
-            .setTextColor(Color.BLACK)
+                .setTextColor(Color.BLACK)
         flexibleCalendarView.getDayOfWeekTextView(FlexibleCalendarView.FRIDAY)
-            .setTextColor(Color.BLACK)
+                .setTextColor(Color.BLACK)
         flexibleCalendarView.getDayOfWeekTextView(FlexibleCalendarView.SUNDAY)
-            .setTextColor(Color.BLACK)
+                .setTextColor(Color.BLACK)
         flexibleCalendarView.getDayOfWeekTextView(FlexibleCalendarView.MONDAY)
-            .setTextColor(Color.BLACK)
+                .setTextColor(Color.BLACK)
         flexibleCalendarView.getDayOfWeekTextView(FlexibleCalendarView.THURSDAY)
-            .setTextColor(Color.BLACK)
+                .setTextColor(Color.BLACK)
         flexibleCalendarView.getDayOfWeekTextView(FlexibleCalendarView.SATURDAY)
-            .setTextColor(Color.BLACK)
+                .setTextColor(Color.BLACK)
         flexibleCalendarView.weekContainer()
-            .setBackgroundColor(ContextCompat.getColor(this, R.color.colorTitle))
+                .setBackgroundColor(ContextCompat.getColor(this, R.color.colorTitle))
         flexibleCalendarView.titleContainer()
-            .setBackgroundColor(ContextCompat.getColor(this, R.color.colorTitle))
+                .setBackgroundColor(ContextCompat.getColor(this, R.color.colorTitle))
         //------calendarsettingfinish------
-
 
 
         //データの読み込み
         val data: Data? = read()
         var datedata: dateData? = readdate()
         val preview = Intent(this, setting::class.java)
-        val doneaction = Intent(this,doneaction::class.java)
+        val doneaction = Intent(this, doneaction::class.java)
         var todaydate: LocalDate = LocalDate.now()
         var realmtodaysdata = realm.where<allData>()
-            .equalTo("date", todaydate.toString())
-            .findAll()
+                .equalTo("date", todaydate.toString())
+                .findAll()
         var realmhabitdata = realm.where<allData>()
-            .findAll()
+                .findAll()
+        var latesthabitdata = realm.where<allData>()
+                .equalTo("id",realmhabitdata.size)
+                .findAll()
+
 
 
         //------calendar add image-------
-        for (habitdata in realmhabitdata){
+        for (habitdata in realmhabitdata) {
             var achievedate = LocalDate.parse(habitdata.date, DateTimeFormatter.ISO_DATE)
-            var period = ChronoUnit.DAYS.between(todaydate,achievedate).toInt()
+            var period = ChronoUnit.DAYS.between(todaydate, achievedate).toInt()
             habitdates.add(period)
-            println(habitdates)
         }
 
+
+
+        //今日のデータがあるとdoneボタン無効。習慣頻度に合わせてdoneボタン無効
         if (realmtodaysdata.size != 0) {
             doneButtonswitch(false)
-        } else {
-            doneButtonswitch(true)
+        }
+        else {
+            if((ChronoUnit.DAYS.between(LocalDate.parse(latesthabitdata[0]?.date, DateTimeFormatter.ISO_DATE), todaydate).toInt())  < (data?.frequent.toString().toInt())) {
+                doneButtonswitch(false)
+            }else{
+                doneButtonswitch(true)
+            }
         }
 
         //データから目的と目標を出力
@@ -115,7 +124,7 @@ class MainActivity : AppCompatActivity(),  FlexibleCalendarMonthCallback {
             finish()
         }
 
-        //回数出力
+        //回数出力  回数データがnullか0であればdoneボタン有効
         if (datedata != null ) {
             if(datedata.habitnumber ==0){
                 doneButtonswitch(true)
@@ -135,11 +144,15 @@ class MainActivity : AppCompatActivity(),  FlexibleCalendarMonthCallback {
 
 
         doneButton.setOnClickListener{
+            var achieven = false
             if(datedata != null) {
                 var nownum : Int =datedata.habitnumber
                 nownum++
                 savenumber(nownum)
                 habitNumber.text=nownum.toString()
+                if(data!!.duration.toInt() == nownum){
+                    achieven = true
+                }
             }else{
                 var nownum : Int =0
                 nownum++
@@ -149,6 +162,7 @@ class MainActivity : AppCompatActivity(),  FlexibleCalendarMonthCallback {
             var today: LocalDate = LocalDate.now()
             insertData(data!!.goal, data!!.target, data!!.frequent, data!!.duration, today.toString())
             doneButtonswitch(false)
+            doneaction.putExtra("achieven",achieven)
             startActivity(doneaction)
             finish()
         }

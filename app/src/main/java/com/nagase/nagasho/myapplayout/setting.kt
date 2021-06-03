@@ -34,6 +34,7 @@ class setting : AppCompatActivity() {
         var frequent = data?.frequent
         var duration = data?.duration
         var first = intent.getBooleanExtra("first",false)
+        var makenew = intent.getBooleanExtra("makenew",false)
         var state:String=""
 
 
@@ -59,6 +60,26 @@ class setting : AppCompatActivity() {
                     // Respond to positive button press
                 }
                 .show()
+        }
+        if(makenew){
+            texteditable()
+            decideButtonswitch(true)
+            failButtonswitch(false)
+            achieveButtonswitch(false)
+            editButtonswitch(false)
+            state="習慣を設定しました。"
+            AlertDialog.Builder(this)
+                    .setTitle("新たな習慣を設定しましょう")
+                    .setMessage("""
+                    |目標達成おめでとうございます。
+                    |あなたは着実に習慣化の力が身についてきています。
+                    |新たな習慣は前よりも厳しいものにしましょう！
+                    |今回も頑張ってください！
+                    """.trimMargin())
+                    .setPositiveButton("新たな習慣を設定") { dialog, which ->
+                        // Respond to positive button press
+                    }
+                    .show()
         }
 
         if (goal != null) {

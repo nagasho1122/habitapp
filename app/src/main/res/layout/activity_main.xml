@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FFFFFF"
     tools:context=".MainActivity">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -155,7 +156,6 @@
         app:fcv_title_text_color="@android:color/black"
         app:fcv_week_days_color="@android:color/darker_gray"
         app:layout_constraintBottom_toBottomOf="parent" />
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

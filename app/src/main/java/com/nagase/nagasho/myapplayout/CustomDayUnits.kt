@@ -39,7 +39,7 @@ class CustomDayUtils {
         someDay.customViewCallback = object : CustomCalendarDayCallback {
             override fun getNewCustomiseView(): View {
                 val imageView = ImageView(context)
-                imageView.setImageResource(R.drawable.simple_ex)
+                imageView.setImageResource(R.drawable.stamp1)
                 return imageView
             }
         }
