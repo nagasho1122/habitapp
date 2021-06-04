@@ -18,6 +18,7 @@ import java.time.LocalDate
 import java.util.*
 import android.graphics.Color
 import androidx.core.content.ContextCompat
+import kotlinx.android.synthetic.main.new_app_widget.*
 import net.soft.vrg.flexiblecalendar.CalendarDay
 import net.soft.vrg.flexiblecalendar.FlexibleCalendarView
 import net.soft.vrg.flexiblecalendar.calendar_listeners.FlexibleCalendarMonthCallback
@@ -73,13 +74,18 @@ class MainActivity : AppCompatActivity(),  FlexibleCalendarMonthCallback {
         val preview = Intent(this, setting::class.java)
         val doneaction = Intent(this, doneaction::class.java)
         var todaydate: LocalDate = LocalDate.now()
+        var alldata: allData? = readalldata()
+        if(alldata == null) {
+            Log.d("Aaaaaaaaaa","aaaaaaaaaaaa")
+            insertData("目的を決めよう", "目標を決めよう", "1", "30", "2010-11-22")
+        }
         var realmtodaysdata = realm.where<allData>()
                 .equalTo("date", todaydate.toString())
                 .findAll()
         var realmhabitdata = realm.where<allData>()
                 .findAll()
         var latesthabitdata = realm.where<allData>()
-                .equalTo("id",realmhabitdata.size)
+                .equalTo("id", realmhabitdata.size)
                 .findAll()
 
 
@@ -197,6 +203,9 @@ class MainActivity : AppCompatActivity(),  FlexibleCalendarMonthCallback {
     }
     fun readdate(): dateData? {
         return realm.where(dateData::class.java).findFirst()
+    }
+    fun readalldata(): allData? {
+        return realm.where(allData::class.java).findFirst()
     }
     fun savenumber(number: Int){
         val datedata: dateData? = readdate()
