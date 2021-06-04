@@ -1,5 +1,7 @@
 package com.nagase.nagasho.myapplayout
 
+import android.appwidget.AppWidgetManager
+import android.content.ComponentName
 import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -18,6 +20,8 @@ import java.time.LocalDate
 import java.util.*
 import android.graphics.Color
 import androidx.core.content.ContextCompat
+import io.realm.RealmResults
+import io.realm.Sort
 import kotlinx.android.synthetic.main.new_app_widget.*
 import net.soft.vrg.flexiblecalendar.CalendarDay
 import net.soft.vrg.flexiblecalendar.FlexibleCalendarView
@@ -74,42 +78,13 @@ class MainActivity : AppCompatActivity(),  FlexibleCalendarMonthCallback {
         val preview = Intent(this, setting::class.java)
         val doneaction = Intent(this, doneaction::class.java)
         var todaydate: LocalDate = LocalDate.now()
-        var alldata: allData? = readalldata()
-        if(alldata == null) {
-            Log.d("Aaaaaaaaaa","aaaaaaaaaaaa")
-            insertData("目的を決めよう", "目標を決めよう", "1", "30", "2010-11-22")
-        }
-        var realmtodaysdata = realm.where<allData>()
-                .equalTo("date", todaydate.toString())
-                .findAll()
-        var realmhabitdata = realm.where<allData>()
-                .findAll()
-        var latesthabitdata = realm.where<allData>()
-                .equalTo("id", realmhabitdata.size)
-                .findAll()
+        var realmtodaysdata:RealmResults<allData>? = realm.where<allData>()
+                    .equalTo("date", todaydate.toString())
+                    .findAll()
+        var realmhabitdata:RealmResults<allData>? = realm.where<allData>()
+                    .findAll()
+        var sortdata = realmhabitdata?.sort("id",Sort.DESCENDING)
 
-
-
-        //------calendar add image-------
-        for (habitdata in realmhabitdata) {
-            var achievedate = LocalDate.parse(habitdata.date, DateTimeFormatter.ISO_DATE)
-            var period = ChronoUnit.DAYS.between(todaydate, achievedate).toInt()
-            habitdates.add(period)
-        }
-
-
-
-        //今日のデータがあるとdoneボタン無効。習慣頻度に合わせてdoneボタン無効
-        if (realmtodaysdata.size != 0) {
-            doneButtonswitch(false)
-        }
-        else {
-            if((ChronoUnit.DAYS.between(LocalDate.parse(latesthabitdata[0]?.date, DateTimeFormatter.ISO_DATE), todaydate).toInt())  < (data?.frequent.toString().toInt())) {
-                doneButtonswitch(false)
-            }else{
-                doneButtonswitch(true)
-            }
-        }
 
         //データから目的と目標を出力
         if (data?.goal != null) {
@@ -124,6 +99,29 @@ class MainActivity : AppCompatActivity(),  FlexibleCalendarMonthCallback {
             preview.putExtra("first", true)
             startActivity(preview)
             finish()
+        }
+
+        if(realmhabitdata.isNullOrEmpty() == false && sortdata.isNullOrEmpty() == false) {
+            var latesthabitdata = sortdata[0]
+
+            //------calendar add image-------
+            for (habitdata in realmhabitdata) {
+                var achievedate = LocalDate.parse(habitdata.date, DateTimeFormatter.ISO_DATE)
+                var period = ChronoUnit.DAYS.between(todaydate, achievedate).toInt()
+                habitdates.add(period)
+            }
+
+
+            //今日のデータがあるとdoneボタン無効。習慣頻度に合わせてdoneボタン無効
+            if (realmtodaysdata?.size != 0) {
+                doneButtonswitch(false)
+            } else {
+                if ((ChronoUnit.DAYS.between(LocalDate.parse(latesthabitdata?.date, DateTimeFormatter.ISO_DATE), todaydate).toInt()) < (data?.frequent.toString().toInt())) {
+                    doneButtonswitch(false)
+                } else {
+                    doneButtonswitch(true)
+                }
+            }
         }
 
         //回数出力  回数データがnullか0であればdoneボタン有効
@@ -164,6 +162,7 @@ class MainActivity : AppCompatActivity(),  FlexibleCalendarMonthCallback {
             var today: LocalDate = LocalDate.now()
             insertData(data!!.goal, data!!.target, data!!.frequent, data!!.duration, today.toString())
             doneButtonswitch(false)
+            updateWidget()
             doneaction.putExtra("achieven",achieven)
             startActivity(doneaction)
             finish()
@@ -232,6 +231,13 @@ class MainActivity : AppCompatActivity(),  FlexibleCalendarMonthCallback {
                     realmObject1.frequent=frequent
         }
         Log.d("Realminsert","result:${realm.where<allData>().findAll()}")
+    }fun updateWidget(){
+        val intent = Intent(this,NewAppWidget::class.java)
+        intent.action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
+        val ids = AppWidgetManager.getInstance(applicationContext)
+                .getAppWidgetIds(ComponentName(applicationContext,NewAppWidget::class.java))
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS,ids)
+        sendBroadcast(intent)
     }
     private  fun doneButtonswitch(bool:Boolean){
         if(bool){

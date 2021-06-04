@@ -1,5 +1,7 @@
 package com.nagase.nagasho.myapplayout
 
+import android.appwidget.AppWidgetManager
+import android.content.ComponentName
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.Color.BLACK
@@ -128,6 +130,7 @@ class setting : AppCompatActivity() {
                 failButtonswitch(true)
                 achieveButtonswitch(true)
                 editButtonswitch(true)
+                updateWidget()
             }
         }
 
@@ -148,7 +151,9 @@ class setting : AppCompatActivity() {
                     state="新たな習慣を設定しました。今度こそ頑張ろう！"
                     deleteData()
                     deletedateData()
+                    deletechoicealldata(goal!!,target!!)
                     textclean()
+                    updateWidget()
                 }
                 .show()
         }
@@ -226,6 +231,15 @@ class setting : AppCompatActivity() {
         target2.deleteAllFromRealm()
         realm.commitTransaction()
     }
+    fun deletechoicealldata(choicegoal:String,choicetarget:String){
+        realm.beginTransaction()
+        var target3 = realm.where<allData>()
+                .equalTo("goal",choicegoal)
+                .equalTo("target",choicetarget)
+                .findAll()
+        target3.deleteAllFromRealm()
+        realm.commitTransaction()
+    }
     private fun texteditable(){
         targetText.isEnabled= true
         goalText.isEnabled= true
@@ -247,6 +261,13 @@ class setting : AppCompatActivity() {
         goalText.setTextColor(Color.BLACK)
         frequencyText.setTextColor(Color.BLACK)
         durationText.setTextColor(Color.BLACK)
+    }fun updateWidget(){
+        val intent = Intent(this,NewAppWidget::class.java)
+        intent.action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
+        val ids = AppWidgetManager.getInstance(applicationContext)
+                .getAppWidgetIds(ComponentName(applicationContext,NewAppWidget::class.java))
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS,ids)
+        sendBroadcast(intent)
     }
     private fun failButtonswitch(bool:Boolean){
         if(bool){
