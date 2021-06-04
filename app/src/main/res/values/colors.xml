@@ -11,10 +11,15 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="colorGreen">#00f234</color>
+    <color name="colorGray">#616060</color>
     <color name="colorToday">#0ea8ae</color>
     <color name="colorYellow">#ffff00</color>
     <color name="colorDark">#000000</color>
     <color name="colorTitle">#ffffff</color>
     <color name="colorDays">#72F83B</color>
     <color name="colornone">#80000000</color>
+    <color name="light_blue_50">#FFE1F5FE</color>
+    <color name="light_blue_200">#FF81D4FA</color>
+    <color name="light_blue_600">#FF039BE5</color>
+    <color name="light_blue_900">#FF01579B</color>
 </resources>

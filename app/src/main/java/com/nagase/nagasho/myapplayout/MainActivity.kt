@@ -13,7 +13,6 @@ import io.realm.kotlin.createObject
 import io.realm.kotlin.where
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main.topAppBar
-import kotlinx.android.synthetic.main.activity_setting.*
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.util.*
@@ -22,9 +21,6 @@ import androidx.core.content.ContextCompat
 import net.soft.vrg.flexiblecalendar.CalendarDay
 import net.soft.vrg.flexiblecalendar.FlexibleCalendarView
 import net.soft.vrg.flexiblecalendar.calendar_listeners.FlexibleCalendarMonthCallback
-import net.soft.vrg.flexiblecalendar.calendar_listeners.OnCalendarClickListener
-import net.soft.vrg.flexiblecalendar.calendar_listeners.OnCalendarLongClickListener
-import java.time.Period
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 
@@ -45,7 +41,7 @@ class MainActivity : AppCompatActivity(),  FlexibleCalendarMonthCallback {
         setContentView(R.layout.activity_main)
 
         //------calendarsetting------
-        flexibleCalendarView = findViewById(R.id.calendar)
+        flexibleCalendarView = findViewById(R.id.calendarWidget)
         flexibleCalendarView.getSettings()
                 .setCalendarMonthCallback(this)
 
