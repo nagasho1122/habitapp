@@ -2,13 +2,16 @@ package com.nagase.nagasho.myapplayout
 
 import android.appwidget.AppWidgetManager
 import android.content.ComponentName
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.Color.BLACK
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.MotionEvent
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AlertDialog
 import com.google.android.material.snackbar.Snackbar
 import io.realm.Realm
@@ -169,6 +172,8 @@ class setting : AppCompatActivity() {
                     // Respond to positive button press
                     texteditable()
                     textclean()
+                    deleteData()
+                    deletedateData()
                     decideButtonswitch(true)
                     failButtonswitch(false)
                     achieveButtonswitch(false)
@@ -188,6 +193,23 @@ class setting : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         realm.close()
+    }
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+        // InputMethodManager をキャストしながら取得
+        val inputMethodManager: InputMethodManager =
+            getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+
+        // エルビス演算子でViewを取得できなければ return false
+        // focusViewには入力しようとしているのEditTextが取得されるはず
+        val focusView = currentFocus ?: return false
+
+        // このメソッドでキーボードを閉じる
+        inputMethodManager.hideSoftInputFromWindow(
+            focusView.windowToken,
+            InputMethodManager.HIDE_NOT_ALWAYS
+        )
+
+        return false
     }
     fun read(): Data? {
         return realm.where(Data::class.java).findFirst()

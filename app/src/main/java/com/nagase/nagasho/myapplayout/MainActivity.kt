@@ -2,6 +2,7 @@ package com.nagase.nagasho.myapplayout
 
 import android.appwidget.AppWidgetManager
 import android.content.ComponentName
+import android.content.Context
 import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -20,8 +21,10 @@ import java.time.LocalDate
 import java.util.*
 import android.graphics.Color
 import androidx.core.content.ContextCompat
+import com.google.android.material.snackbar.Snackbar
 import io.realm.RealmResults
 import io.realm.Sort
+import kotlinx.android.synthetic.main.activity_setting.*
 import kotlinx.android.synthetic.main.new_app_widget.*
 import net.soft.vrg.flexiblecalendar.CalendarDay
 import net.soft.vrg.flexiblecalendar.FlexibleCalendarView
@@ -84,6 +87,7 @@ class MainActivity : AppCompatActivity(),  FlexibleCalendarMonthCallback {
         var realmhabitdata:RealmResults<allData>? = realm.where<allData>()
                     .findAll()
         var sortdata = realmhabitdata?.sort("id",Sort.DESCENDING)
+        var frequencycheking:frequencycheck? = readfrequencydata()
 
 
         //データから目的と目標を出力
@@ -116,9 +120,12 @@ class MainActivity : AppCompatActivity(),  FlexibleCalendarMonthCallback {
             if (realmtodaysdata?.size != 0) {
                 doneButtonswitch(false)
             } else {
-                if ((ChronoUnit.DAYS.between(LocalDate.parse(latesthabitdata?.date, DateTimeFormatter.ISO_DATE), todaydate).toInt()) < (data?.frequent.toString().toInt())) {
+                if (Math.abs((ChronoUnit.DAYS.between(LocalDate.parse(latesthabitdata?.date, DateTimeFormatter.ISO_DATE), todaydate).toInt()) ) < (data?.frequent.toString().toInt())) {
+                    savecheck(false)
+                    updateWidget()
                     doneButtonswitch(false)
                 } else {
+                    savecheck(true)
                     doneButtonswitch(true)
                 }
             }
@@ -203,8 +210,8 @@ class MainActivity : AppCompatActivity(),  FlexibleCalendarMonthCallback {
     fun readdate(): dateData? {
         return realm.where(dateData::class.java).findFirst()
     }
-    fun readalldata(): allData? {
-        return realm.where(allData::class.java).findFirst()
+    fun readfrequencydata(): frequencycheck? {
+        return realm.where(frequencycheck::class.java).findFirst()
     }
     fun savenumber(number: Int){
         val datedata: dateData? = readdate()
@@ -216,6 +223,19 @@ class MainActivity : AppCompatActivity(),  FlexibleCalendarMonthCallback {
             } else {
                 val newdata: dateData = it.createObject(dateData::class.java) //保存するデータの新規作成
                 newdata.habitnumber = number
+            }
+        }
+    }
+    fun savecheck(bool: Boolean){
+        val frequencychecking: frequencycheck? = readfrequencydata()
+
+        realm.executeTransaction {
+            //データベースへの書き込み
+            if (frequencychecking != null) {
+                frequencychecking.check = bool
+            } else {
+                val newdata: frequencycheck = it.createObject(frequencycheck::class.java) //保存するデータの新規作成
+                newdata.check = bool
             }
         }
     }

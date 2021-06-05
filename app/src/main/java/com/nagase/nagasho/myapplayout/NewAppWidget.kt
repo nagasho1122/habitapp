@@ -25,6 +25,7 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 import java.util.*
+import kotlin.math.absoluteValue
 
 /**
  * Implementation of App Widget functionality.
@@ -56,7 +57,10 @@ class NewAppWidget : AppWidgetProvider() {
     }
     fun readdate(): dateData? {
         return realm.where(dateData::class.java).findFirst()
-    }fun savenumber(number: Int){
+    }fun readfrequencydata(): frequencycheck? {
+        return realm.where(frequencycheck::class.java).findFirst()
+    }
+    fun savenumber(number: Int){
         val datedata: dateData? = readdate()
 
         realm.executeTransaction {
@@ -68,7 +72,21 @@ class NewAppWidget : AppWidgetProvider() {
                 newdata.habitnumber = number
             }
         }
-    }fun insertData(goal: String, target: String, frequent: String,duration: String,data:String){
+    }
+    fun savecheck(bool: Boolean){
+        val frequencychecking: frequencycheck? = readfrequencydata()
+
+        realm.executeTransaction {
+            //データベースへの書き込み
+            if (frequencychecking != null) {
+                frequencychecking.check = bool
+            } else {
+                val newdata: frequencycheck = it.createObject(frequencycheck::class.java) //保存するデータの新規作成
+                newdata.check = bool
+            }
+        }
+    }
+    fun insertData(goal: String, target: String, frequent: String,duration: String,data:String){
         realm.executeTransaction{
             var id = realm.where<allData>().max("id")
             var nextId = (id?.toLong() ?:  0)+1
@@ -93,24 +111,47 @@ class NewAppWidget : AppWidgetProvider() {
                 val data: Data? = read()
                 var datedata: dateData? = readdate()
                 val viewsome = RemoteViews(context.packageName, R.layout.new_app_widget)
+                var todaydate: LocalDate = LocalDate.now()
+                var realmtodaysdata:RealmResults<allData>? = realm.where<allData>()
+                        .equalTo("date", todaydate.toString())
+                        .findAll()
+                var realmhabitdata:RealmResults<allData>? = realm.where<allData>()
+                        .findAll()
+                var sortdata = realmhabitdata?.sort("id",Sort.DESCENDING)
+                var frequencychecking:frequencycheck? = readfrequencydata()
+                savecheck(true)
 
-                if(datedata != null) {
-                    var nownum : Int =datedata.habitnumber
-                    nownum++
-                    savenumber(nownum)
-                    viewsome.setTextViewText(R.id.habitwidgetNumber,nownum.toString())
-                }else{
-                    var nownum : Int =0
-                    nownum++
-                    savenumber(nownum)
-                    viewsome.setTextViewText(R.id.habitwidgetNumber,nownum.toString())
+                if(realmhabitdata.isNullOrEmpty() == false && sortdata.isNullOrEmpty() == false){
+                    var latesthabitdata = sortdata[0]
+                    if (Math.abs((ChronoUnit.DAYS.between(LocalDate.parse(latesthabitdata?.date, DateTimeFormatter.ISO_DATE), todaydate).toInt()) ) < (data?.frequent.toString().toInt())) {
+                        savecheck(false)
                 }
 
-                var today: LocalDate = LocalDate.now()
-                insertData(data!!.goal, data!!.target, data!!.frequent, data!!.duration, today.toString())
 
 
-                viewsome.setImageViewResource(R.id.stampView7,R.drawable.stamp1)
+                if (realmtodaysdata?.size == 0 ){
+                    if(frequencychecking?.check != false){
+                        if(datedata != null) {
+                            var nownum : Int =datedata.habitnumber
+                            nownum++
+                            savenumber(nownum)
+                            viewsome.setTextViewText(R.id.habitwidgetNumber,nownum.toString())
+                        }else{
+                            var nownum : Int =0
+                            nownum++
+                            savenumber(nownum)
+                            viewsome.setTextViewText(R.id.habitwidgetNumber,nownum.toString())
+                        }
+
+                        var today: LocalDate = LocalDate.now()
+                        insertData(data!!.goal, data!!.target, data!!.frequent, data!!.duration, today.toString())
+
+
+                        viewsome.setImageViewResource(R.id.stampView7,R.drawable.stamp1)
+                    }
+                }
+
+
                 // ウィジェットを更新
                 val myWidget = ComponentName(context, NewAppWidget::class.java)
                 val manager = AppWidgetManager.getInstance(context)
@@ -137,12 +178,12 @@ internal fun updateAppWidget(
 ) {
 
     var todaydate: LocalDate = LocalDate.now()
-    var period1=Period.of(0,0,1)
-    var period2=Period.of(0,0,2)
-    var period3=Period.of(0,0,3)
-    var period4=Period.of(0,0,4)
-    var period5=Period.of(0,0,5)
-    var period6=Period.of(0,0,6)
+    var period1 = Period.of(0, 0, 1)
+    var period2 = Period.of(0, 0, 2)
+    var period3 = Period.of(0, 0, 3)
+    var period4 = Period.of(0, 0, 4)
+    var period5 = Period.of(0, 0, 5)
+    var period6 = Period.of(0, 0, 6)
     var formatter = DateTimeFormatter.ofPattern("M-dd")
     val viewsome = RemoteViews(context.packageName, R.layout.new_app_widget)
 
@@ -154,15 +195,15 @@ internal fun updateAppWidget(
     var text6 = todaydate.minus(period5).format(formatter)
     var text7 = todaydate.minus(period6).format(formatter)
 
-    viewsome.setTextViewText(R.id.dayText7,text1)
-    viewsome.setTextViewText(R.id.dayText6,text2)
-    viewsome.setTextViewText(R.id.dayText5,text3)
-    viewsome.setTextViewText(R.id.dayText4,text4)
-    viewsome.setTextViewText(R.id.dayText3,text5)
-    viewsome.setTextViewText(R.id.dayText2,text6)
-    viewsome.setTextViewText(R.id.dayText1,text7)
+    viewsome.setTextViewText(R.id.dayText7, text1)
+    viewsome.setTextViewText(R.id.dayText6, text2)
+    viewsome.setTextViewText(R.id.dayText5, text3)
+    viewsome.setTextViewText(R.id.dayText4, text4)
+    viewsome.setTextViewText(R.id.dayText3, text5)
+    viewsome.setTextViewText(R.id.dayText2, text6)
+    viewsome.setTextViewText(R.id.dayText1, text7)
 
-    if(realmhabitdata.isNullOrEmpty() == false ) {
+    if (realmhabitdata.isNullOrEmpty() == false) {
         for (habitdata in realmhabitdata) {
             var achievedate = LocalDate.parse(habitdata.date, DateTimeFormatter.ISO_DATE)
             var period = ChronoUnit.DAYS.between(todaydate, achievedate).toInt()
@@ -172,7 +213,14 @@ internal fun updateAppWidget(
         }
     }
 
-    if(habitdates.isNullOrEmpty() == false) {
+    if (habitdates.isNullOrEmpty() == false) {
+        viewsome.setImageViewResource(R.id.stampView7, R.drawable.noimage)
+        viewsome.setImageViewResource(R.id.stampView6, R.drawable.noimage)
+        viewsome.setImageViewResource(R.id.stampView5, R.drawable.noimage)
+        viewsome.setImageViewResource(R.id.stampView4, R.drawable.noimage)
+        viewsome.setImageViewResource(R.id.stampView3, R.drawable.noimage)
+        viewsome.setImageViewResource(R.id.stampView2, R.drawable.noimage)
+        viewsome.setImageViewResource(R.id.stampView1, R.drawable.noimage)
         for (day in habitdates) {
             var newday = day * (-1)
             when (newday) {
@@ -200,7 +248,7 @@ internal fun updateAppWidget(
             }
 
         }
-    }else{
+    } else {
         viewsome.setImageViewResource(R.id.stampView7, R.drawable.line)
         viewsome.setImageViewResource(R.id.stampView6, R.drawable.line)
         viewsome.setImageViewResource(R.id.stampView5, R.drawable.line)
@@ -211,22 +259,20 @@ internal fun updateAppWidget(
 
     }
 
-
-
     if (data?.goal != null) {
-        viewsome.setTextViewText(R.id.goalwidgetText,data.goal)
-    }else{
-        viewsome.setTextViewText(R.id.goalwidgetText,"目的をアプリで設定しよう")
+        viewsome.setTextViewText(R.id.goalwidgetText, data.goal)
+    } else {
+        viewsome.setTextViewText(R.id.goalwidgetText, "目的をアプリで設定しよう")
     }
     if (data?.target != null) {
-        viewsome.setTextViewText(R.id.targetwidgetText,data.target)
-    }else{
-        viewsome.setTextViewText(R.id.targetwidgetText,"目標をアプリで設定しよう")
+        viewsome.setTextViewText(R.id.targetwidgetText, data.target)
+    } else {
+        viewsome.setTextViewText(R.id.targetwidgetText, "目標をアプリで設定しよう")
     }
-    if(datedata!= null){
-        viewsome.setTextViewText(R.id.habitwidgetNumber,datedata.habitnumber.toString())
-    }else{
-        viewsome.setTextViewText(R.id.habitwidgetNumber,"0")
+    if (datedata != null) {
+        viewsome.setTextViewText(R.id.habitwidgetNumber, datedata.habitnumber.toString())
+    } else {
+        viewsome.setTextViewText(R.id.habitwidgetNumber, "0")
     }
 
 
@@ -238,5 +284,5 @@ internal fun updateAppWidget(
 
     // ウィジェットを更新
     appWidgetManager.updateAppWidget(appWidgetId, viewsome)
-
+}
 }
