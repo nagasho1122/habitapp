@@ -20,6 +20,7 @@ import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.util.*
 import android.graphics.Color
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import com.google.android.material.snackbar.Snackbar
 import io.realm.RealmResults
@@ -88,23 +89,52 @@ class MainActivity : AppCompatActivity(),  FlexibleCalendarMonthCallback {
                     .findAll()
         var sortdata = realmhabitdata?.sort("id",Sort.DESCENDING)
         var frequencycheking:frequencycheck? = readfrequencydata()
+        var sharedPref = getSharedPreferences("firstcheck", Context.MODE_PRIVATE)
+        var firstlychecking = sharedPref.getBoolean("bool",true)
 
 
-        //データから目的と目標を出力
+        //データから目的と目標を出力 データがあればDoneボタン押せるようになる
         if (data?.goal != null) {
             textView2.text = data.target
             textView3.text = data.goal
+            doneButtonswitch(true)
         } else {
-            preview.putExtra("first", true)
-            startActivity(preview)
-            finish()
-        }
-        if (data?.goal == "") {
-            preview.putExtra("first", true)
-            startActivity(preview)
-            finish()
+            textView2.text ="目的を設定しよう"
+            textView3.text = "目標を設定しよう"
+            doneButtonswitch(false)
         }
 
+        //初回起動時処理
+        if (firstlychecking) {
+            AlertDialog.Builder(this)
+                    .setTitle("習慣化を始めましょう")
+                    .setMessage("""
+                    |ダウンロードありがとうございます。
+                    |本アプリはあなたの習慣化を手助けします。
+                    |目標を達成した日は画面中央のDoneボタンを押すことでカレンダー上にスタンプが押されます。
+                    |習慣を継続し、スタンプを増やしていきましょう！
+                    """.trimMargin())
+                    .setPositiveButton("次へ") { dialog, which ->
+                        // Respond to positive button press
+                        AlertDialog.Builder(this)
+                                .setTitle("次へ")
+                                .setMessage("""
+                    |初めに目標、目的等を設定する画面に移ります。
+                    |設定画面は右上の歯車アイコンからも飛ぶことができます。
+                    |ウィジェット機能も搭載しております。是非ご使用ください！
+                    """.trimMargin())
+                                .setPositiveButton("習慣化を初める") { dialog, which ->
+                                    // Respond to positive button press
+                                    sharedPref.edit().putBoolean("bool",false).apply()
+                                    preview.putExtra("first", true)
+                                    startActivity(preview)
+                                }
+                                .show()
+                    }
+                    .show()
+        }
+
+        //スタンプを押すデータを取得
         if(realmhabitdata.isNullOrEmpty() == false && sortdata.isNullOrEmpty() == false) {
             var latesthabitdata = sortdata[0]
 
@@ -126,24 +156,22 @@ class MainActivity : AppCompatActivity(),  FlexibleCalendarMonthCallback {
                     doneButtonswitch(false)
                 } else {
                     savecheck(true)
-                    doneButtonswitch(true)
+                    if(data?.goal != null) {
+                        doneButtonswitch(true)
+                    }
                 }
             }
         }
 
         //回数出力  回数データがnullか0であればdoneボタン有効
         if (datedata != null ) {
-            if(datedata.habitnumber ==0){
-                doneButtonswitch(true)
-            }
             habitNumber.text = datedata.habitnumber.toString()
         }else{
-            savenumber(0)
-            doneButtonswitch(true)
             habitNumber.text="0"
+            if(data?.goal != null){
+                doneButtonswitch(true)
+            }
         }
-
-        datedata=readdate()
 
 
         val calendarView = CalendarView(this)
@@ -172,17 +200,42 @@ class MainActivity : AppCompatActivity(),  FlexibleCalendarMonthCallback {
             updateWidget()
             doneaction.putExtra("achieven",achieven)
             startActivity(doneaction)
-            finish()
         }
         //Appbarの設定ページへ飛ぶ処理
         topAppBar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.settingicon -> {
                     startActivity(preview)
-                    finish()
                     // Handle favorite icon press
                     true
 
+                }
+                R.id.helpicon -> {
+                    AlertDialog.Builder(this)
+                            .setTitle("ヘルプ")
+                            .setMessage("""
+                    |本アプリはあなたの習慣化を手助けします。
+                    |現在の画面がホーム画面であり、右上の歯車アイコンを押すと目標等の設定ができます。
+                    |目標を達成した日は画面中央のDoneボタンを押すことでカレンダー上にスタンプが押されます。
+                    |習慣を継続し、スタンプを増やしていきましょう！
+                    """.trimMargin())
+                            .setPositiveButton("次へ") { dialog, which ->
+                                // Respond to positive button press
+                                AlertDialog.Builder(this)
+                                        .setTitle("ウィジェット機能について")
+                                        .setMessage("""
+                    |ウィジェットでは目的、目標及び今日を含めた過去6日間の記録が見れます。
+                    |目標を達成した日はウィジェット上のDoneボタンを押すことでもスタンプが押されます。
+                    |アプリとウィジェットを駆使し、習慣化していきましょう！
+                    """.trimMargin())
+                                        .setPositiveButton("閉じる") { dialog, which ->
+                                            // Respond to positive button press
+                                        }
+                                        .show()
+                            }
+                            .show()
+                    // Handle favorite icon press
+                    true
                 }
                 else -> false
             }

@@ -52,21 +52,8 @@ class setting : AppCompatActivity() {
             achieveButtonswitch(false)
             editButtonswitch(false)
             state="習慣を設定しました。"
-            AlertDialog.Builder(this)
-                .setTitle("習慣を設定しましょう")
-                .setMessage("""
-                    |目的と目標を明確にすることでモチベーションを持続できます。
-                    |習慣頻度と期間を選択することで記録を可視化できます。
-                    |目的と目標の違いは以下を参考にしてください。
-                    |目的:健康になる
-                    |目標:腹筋バキバキ
-                    """.trimMargin())
-                .setPositiveButton("習慣化を初める") { dialog, which ->
-                    // Respond to positive button press
-                }
-                .show()
-        }
-        if(makenew){
+            tutorial()
+        }else if(makenew){
             texteditable()
             decideButtonswitch(true)
             failButtonswitch(false)
@@ -85,6 +72,23 @@ class setting : AppCompatActivity() {
                         // Respond to positive button press
                     }
                     .show()
+        }else if(data?.goal == null){ //データが無いとき目的の追加のみ行える。
+            texteditable()
+            decideButtonswitch(true)
+            failButtonswitch(false)
+            achieveButtonswitch(false)
+            editButtonswitch(false)
+            state="習慣を設定しました。"
+            AlertDialog.Builder(this)
+                    .setTitle("習慣を設定しましょう")
+                    .setMessage("""
+                    |目的、目標が登録されていません。
+                    |新たな習慣を設定しましょう。
+                    """.trimMargin())
+                    .setPositiveButton("習慣を設定") { dialog, which ->
+                        // Respond to positive button press
+                    }
+                    .show()
         }
 
         if (goal != null) {
@@ -92,6 +96,18 @@ class setting : AppCompatActivity() {
             goalText.setText(goal)
             frequencyText.setText(frequent)
             durationText.setText(duration)
+        }
+
+        topAppBar.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.helpiconSetting -> {
+                    tutorial()
+                    // Handle favorite icon press
+                    true
+
+                }
+                else -> false
+            }
         }
 
         editButton.setOnClickListener{ //編集の処理
@@ -326,5 +342,32 @@ class setting : AppCompatActivity() {
             editButton.isEnabled=false
             editButton.background=getDrawable(R.drawable.background_circle5)
         }
+    }
+    private fun tutorial(){
+        AlertDialog.Builder(this)
+                .setTitle("習慣を設定しましょう")
+                .setMessage("""
+                    |目的と目標を明確にすることでモチベーションを持続できます。
+                    |目的と目標の違いは以下を参考にしてください。
+                    |
+                    |目的:健康になる
+                    |目標:腹筋バキバキ
+                    """.trimMargin())
+                .setPositiveButton("次へ") { dialog, which ->
+                    // Respond to positive button press
+                    AlertDialog.Builder(this)
+                            .setTitle("習慣を設定しましょう")
+                            .setMessage("""
+                    |習慣頻度とは、あなたの習慣が何日ごとに行なわれるかを表します。
+                    |毎日であれば1日、3日に一回であれば3日を入力します。
+                    |目標回数は達成したい習慣の回数を書いてください。
+                    |まずは多すぎない回数を設定すると良いでしょう。
+                    """.trimMargin())
+                            .setPositiveButton("習慣化を初める") { dialog, which ->
+                                // Respond to positive button press
+                            }
+                            .show()
+                }
+                .show()
     }
 }

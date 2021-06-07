@@ -2,6 +2,11 @@
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <item
+        android:id="@+id/helpicon"
+        android:icon="@drawable/helpicon"
+        android:title="ヘルプ"
+        app:showAsAction="always" />
+    <item
         android:id="@+id/settingicon"
         android:icon="@drawable/setting"
         android:title="設定"

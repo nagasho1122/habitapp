@@ -10,7 +10,8 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/coordinatorLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="#FFFFFF">
 
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
@@ -111,6 +112,14 @@
             android:inputType="number"
             android:textSize="30sp" />
 
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="日"
+            android:textSize="18sp" />
+
     </LinearLayout>
 
     <LinearLayout
@@ -129,7 +138,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:fontFamily="sans-serif"
-            android:text="期間 : "
+            android:text="目標回数 : "
             android:textColor="#000000"
             android:textSize="30sp" />
 
@@ -149,7 +158,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="日"
+            android:text="回"
             android:textSize="18sp" />
     </LinearLayout>
 
