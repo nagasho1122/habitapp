@@ -150,15 +150,19 @@ class MainActivity : AppCompatActivity(),  FlexibleCalendarMonthCallback {
             if (realmtodaysdata?.size != 0) {
                 doneButtonswitch(false)
             } else {
-                if (Math.abs((ChronoUnit.DAYS.between(LocalDate.parse(latesthabitdata?.date, DateTimeFormatter.ISO_DATE), todaydate).toInt()) ) < (data?.frequent.toString().toInt())) {
-                    savecheck(false)
-                    updateWidget()
-                    doneButtonswitch(false)
-                } else {
-                    savecheck(true)
-                    if(data?.goal != null) {
-                        doneButtonswitch(true)
+                if(data?.frequent != null) {
+                    if (Math.abs((ChronoUnit.DAYS.between(LocalDate.parse(latesthabitdata?.date, DateTimeFormatter.ISO_DATE), todaydate).toInt())) < (data?.frequent.toString().toInt())) {
+                        savecheck(false)
+                        updateWidget()
+                        doneButtonswitch(false)
+                    } else {
+                        savecheck(true)
+                        if (data?.goal != null) {
+                            doneButtonswitch(true)
+                        }
                     }
+                }else{
+                    doneButtonswitch(false)
                 }
             }
         }
@@ -193,6 +197,9 @@ class MainActivity : AppCompatActivity(),  FlexibleCalendarMonthCallback {
                 nownum++
                 savenumber(nownum)
                 habitNumber.text=nownum.toString()
+                if(data!!.duration.toInt() == nownum){
+                    achieven = true
+                }
             }
             var today: LocalDate = LocalDate.now()
             insertData(data!!.goal, data!!.target, data!!.frequent, data!!.duration, today.toString())

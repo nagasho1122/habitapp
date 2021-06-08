@@ -145,10 +145,16 @@ class NewAppWidget : AppWidgetProvider() {
 
                         var today: LocalDate = LocalDate.now()
                         insertData(data!!.goal, data!!.target, data!!.frequent, data!!.duration, today.toString())
-
-
                         viewsome.setImageViewResource(R.id.stampView7,R.drawable.stamp1)
                     }
+                }else if((datedata == null) and (data?.goal != null)){
+                    var nownum : Int =0
+                    var today: LocalDate = LocalDate.now()
+                    nownum++
+                    savenumber(nownum)
+                    viewsome.setTextViewText(R.id.habitwidgetNumber,nownum.toString())
+                    insertData(data!!.goal, data!!.target, data!!.frequent, data!!.duration, today.toString())
+                    viewsome.setImageViewResource(R.id.stampView7,R.drawable.stamp1)
                 }
 
 

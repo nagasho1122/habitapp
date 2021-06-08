@@ -20,7 +20,10 @@ class doneaction : AppCompatActivity() {
         val achieven = intent.getBooleanExtra("achieven",false)
 
 
+
         if(achieven){
+            lottie.setAnimation(R.raw.achive)
+            lottie.playAnimation()
             commentText.text = """
                     |目標の期間を達成しました！
                     |おめでとうございます。
@@ -29,6 +32,8 @@ class doneaction : AppCompatActivity() {
             backButton.text="設定"
             deleteData()
             deletedateData()
+        }else{
+            lottie.playAnimation()
         }
 
         backButton.setOnClickListener {

@@ -54,7 +54,7 @@
             android:layout_width="225dp"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif"
-            android:text="TextView"
+            android:text="目標をアプリで設定しよう"
             android:textColor="#000000"
             android:textSize="18sp" />
     </LinearLayout>
