@@ -1,9 +1,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@android:color/white"
+    android:background="@color/changewidgetbackground"
     android:gravity="center"
     android:orientation="vertical"
     android:padding="@dimen/widget_margin">
@@ -21,7 +21,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif"
             android:text="目的："
-            android:textColor="#000000"
+            android:textColor="@color/changetextcolor"
             android:textSize="18sp" />
 
         <TextView
@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif"
             android:text="目的をアプリで設定しよう"
-            android:textColor="#000000"
+            android:textColor="@color/changetextcolor"
             android:textSize="18sp" />
     </LinearLayout>
 
@@ -46,7 +46,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif"
             android:text="目標："
-            android:textColor="#000000"
+            android:textColor="@color/changetextcolor"
             android:textSize="18sp" />
 
         <TextView
@@ -55,7 +55,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif"
             android:text="目標をアプリで設定しよう"
-            android:textColor="#000000"
+            android:textColor="@color/changetextcolor"
             android:textSize="18sp" />
     </LinearLayout>
 
@@ -80,6 +80,7 @@
                 android:gravity="top|left"
                 android:paddingLeft="4dp"
                 android:text="5-29"
+                android:textColor="@color/changetextcolor"
                 android:textSize="10sp" />
 
             <ImageView
@@ -105,7 +106,8 @@
                 android:gravity="top|left"
                 android:paddingLeft="4dp"
                 android:text="5-29"
-                android:textSize="10sp"  />
+                android:textColor="@color/changetextcolor"
+                android:textSize="10sp" />
 
             <ImageView
                 android:id="@+id/stampView2"
@@ -129,6 +131,7 @@
                 android:gravity="top|left"
                 android:paddingLeft="4dp"
                 android:text="5-29"
+                android:textColor="@color/changetextcolor"
                 android:textSize="10sp" />
 
             <ImageView
@@ -153,6 +156,7 @@
                 android:gravity="top|left"
                 android:paddingLeft="4dp"
                 android:text="5-29"
+                android:textColor="@color/changetextcolor"
                 android:textSize="10sp" />
 
             <ImageView
@@ -177,6 +181,7 @@
                 android:gravity="top|left"
                 android:paddingLeft="4dp"
                 android:text="5-29"
+                android:textColor="@color/changetextcolor"
                 android:textSize="10sp" />
 
             <ImageView
@@ -201,6 +206,7 @@
                 android:gravity="top|left"
                 android:paddingLeft="4dp"
                 android:text="5-29"
+                android:textColor="@color/changetextcolor"
                 android:textSize="10sp" />
 
             <ImageView
@@ -225,6 +231,7 @@
                 android:gravity="top|left"
                 android:paddingLeft="4dp"
                 android:text="5-29"
+                android:textColor="@color/changetextcolor"
                 android:textSize="10sp" />
 
             <ImageView
@@ -248,7 +255,7 @@
             android:fontFamily="sans-serif-black"
             android:gravity="center"
             android:text="100"
-            android:textColor="#000000"
+            android:textColor="@color/changetextcolor"
             android:textSize="30sp" />
 
         <TextView
@@ -258,7 +265,7 @@
             android:fontFamily="sans-serif"
             android:gravity="center"
             android:text="回継続"
-            android:textColor="#000000"
+            android:textColor="@color/changetextcolor"
             android:textSize="18sp" />
 
         <Button

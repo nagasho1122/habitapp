@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/changebackground"
     tools:context=".doneaction">
 
     <TextView
@@ -13,6 +14,7 @@
         android:layout_marginTop="100dp"
         android:gravity="center"
         android:text="お疲れさまでした！！"
+        android:textColor="@color/changetextcolor"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -5,13 +5,13 @@
     android:id="@+id/containerSetting"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/changebackground"
     tools:context=".setting">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/coordinatorLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#FFFFFF">
+        android:layout_height="match_parent">
 
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
@@ -40,9 +40,9 @@
         android:layout_marginTop="75dp"
         android:layout_marginEnd="45dp"
         android:hint="目的"
-        app:errorEnabled="true"
         app:counterEnabled="true"
         app:counterMaxLength="26"
+        app:errorEnabled="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -53,6 +53,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:maxLines="2"
+            android:textColor="@color/changetextcolor"
             android:textSize="20sp" />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -66,12 +67,13 @@
         android:layout_marginTop="45dp"
         android:layout_marginEnd="45dp"
         android:hint="目標"
-        app:errorEnabled="true"
         app:counterEnabled="true"
         app:counterMaxLength="26"
+        app:errorEnabled="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textField1"
+        app:suffixTextColor="@color/changetextcolor"
         tools:ignore="MissingConstraints">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -79,6 +81,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:maxLines="2"
+            android:textColor="@color/changetextcolor"
             android:textSize="20sp" />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -99,7 +102,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif"
             android:text="習慣頻度 : "
-            android:textColor="#000000"
+            android:textColor="@color/changetextcolor"
             android:textSize="30sp" />
 
         <EditText
@@ -110,6 +113,7 @@
             android:gravity="center"
             android:hint="0"
             android:inputType="number"
+            android:textColorHint="@color/changeothermonthtext"
             android:textSize="30sp" />
 
         <TextView
@@ -118,6 +122,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="日"
+            android:textColor="@color/changetextcolor"
             android:textSize="18sp" />
 
     </LinearLayout>
@@ -139,7 +144,7 @@
             android:layout_weight="1"
             android:fontFamily="sans-serif"
             android:text="目標回数 : "
-            android:textColor="#000000"
+            android:textColor="@color/changetextcolor"
             android:textSize="30sp" />
 
         <EditText
@@ -151,6 +156,8 @@
             android:gravity="center"
             android:hint="0"
             android:inputType="number"
+            android:textColor="@color/changetextcolor"
+            android:textColorHint="@color/changeothermonthtext"
             android:textSize="30sp" />
 
         <TextView
@@ -159,6 +166,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="回"
+            android:textColor="@color/changetextcolor"
             android:textSize="18sp" />
     </LinearLayout>
 
@@ -187,6 +195,7 @@
                 android:layout_marginBottom="20dp"
                 android:background="@drawable/background_circle2"
                 android:text="編集"
+                android:textColor="@color/changetextcolor"
                 android:textSize="18sp" />
 
             <androidx.appcompat.widget.AppCompatButton
@@ -200,6 +209,7 @@
                 android:background="@drawable/background_circle5"
                 android:enabled="false"
                 android:text="決定"
+                android:textColor="@color/changetextcolor"
                 android:textSize="18sp" />
         </LinearLayout>
 
@@ -218,6 +228,7 @@
                 android:layout_marginBottom="20dp"
                 android:background="@drawable/background_circle3"
                 android:text="失敗"
+                android:textColor="@color/changetextcolor"
                 android:textSize="18sp" />
 
             <androidx.appcompat.widget.AppCompatButton

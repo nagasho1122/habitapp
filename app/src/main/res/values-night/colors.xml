@@ -22,10 +22,9 @@
     <color name="light_blue_200">#FF81D4FA</color>
     <color name="light_blue_600">#FF039BE5</color>
     <color name="light_blue_900">#FF01579B</color>
-    <color name="nonecolor">#00000000</color>
-    <color name="changebackground">#FFFFFF</color>
-    <color name="changetextcolor">#000000</color>
-    <color name="changeothermonthtext">#ffaaaaaa</color>
-    <color name="changeholeblue">#0099cc</color>
-    <color name="changewidgetbackground">#ffffff</color>
+    <color name="changebackground">#00000000</color>
+    <color name="changetextcolor">#FFFFFF</color>
+    <color name="changeothermonthtext">#aaffffff</color>
+    <color name="changeholeblue">#ff6633</color>
+    <color name="changewidgetbackground">#000000</color>
 </resources>

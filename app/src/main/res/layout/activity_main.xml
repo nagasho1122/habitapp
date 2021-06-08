@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF"
+    android:background="@color/changebackground"
     tools:context=".MainActivity">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -45,7 +45,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif"
             android:text="目的 :"
-            android:textColor="#000000"
+            android:textColor="@color/changetextcolor"
             android:textSize="20sp" />
 
         <TextView
@@ -54,7 +54,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-condensed-medium"
             android:maxLines="2"
-            android:textColor="#000000"
+            android:textColor="@color/changetextcolor"
             android:textSize="20sp" />
     </LinearLayout>
 
@@ -75,7 +75,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif"
             android:text="目標 :"
-            android:textColor="#000000"
+            android:textColor="@color/changetextcolor"
             android:textSize="20sp" />
 
         <TextView
@@ -84,7 +84,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-condensed-medium"
             android:maxLines="2"
-            android:textColor="#000000"
+            android:textColor="@color/changetextcolor"
             android:textSize="20sp" />
 
     </LinearLayout>
@@ -104,7 +104,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="7"
-            android:textColor="#000000"
+            android:textColor="@color/changetextcolor"
             android:textSize="60sp" />
 
         <TextView
@@ -112,7 +112,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="回"
-            android:textColor="#000000"
+            android:textColor="@color/changetextcolor"
             android:textSize="60sp" />
 
         <TextView
@@ -121,7 +121,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
             android:text="継続"
-            android:textColor="#000000"
+            android:textColor="@color/changetextcolor"
             android:textSize="30sp" />
 
     </LinearLayout>
@@ -133,6 +133,7 @@
         android:layout_marginTop="20dp"
         android:background="@drawable/background_circle"
         android:text="Done"
+        android:textColor="@color/changetextcolor"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -142,20 +143,21 @@
         android:id="@+id/calendarWidget"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/nonecolor"
         android:scaleX="0.8"
         android:scaleY="0.8"
         android:translationY="30dp"
-        app:fcv_background_color="@android:color/white"
+        app:fcv_background_color="@color/changebackground"
         app:fcv_calendar_day_text_size="15sp"
-        app:fcv_current_day_text_color="@android:color/holo_blue_dark"
-        app:fcv_current_month_text_color="@android:color/black"
-        app:fcv_current_month_other_days_text_color="@android:color/darker_gray"
         app:fcv_current_day_background_color="@color/light_blue_200"
+        app:fcv_current_day_text_color="@color/changeholeblue"
+        app:fcv_current_month_other_days_text_color="@color/changeothermonthtext"
+        app:fcv_current_month_text_color="@color/changetextcolor"
         app:fcv_next_button="@drawable/ic_next_button_example2"
-        app:fcv_other_month_text_color="@android:color/black"
+        app:fcv_other_month_text_color="@color/changetextcolor"
         app:fcv_previous_button="@drawable/ic_previous2"
-        app:fcv_title_text_color="@android:color/black"
-        app:fcv_week_days_color="@android:color/darker_gray"
+        app:fcv_title_text_color="@color/changetextcolor"
+        app:fcv_week_days_color="@color/changeothermonthtext"
         app:layout_constraintBottom_toBottomOf="parent" />
 
 

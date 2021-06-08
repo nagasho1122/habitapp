@@ -15,6 +15,7 @@ import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AlertDialog
 import com.google.android.material.snackbar.Snackbar
 import io.realm.Realm
+import io.realm.RealmResults
 import io.realm.kotlin.delete
 import io.realm.kotlin.where
 import io.realm.log.RealmLog.error
@@ -26,8 +27,8 @@ import kotlin.toString as toString1
 class setting : AppCompatActivity() {
 
     val realm: Realm = Realm.getDefaultInstance()
-    val data: Data? = read()
-    val datedata: dateData? = readdate()
+    var data: Data? = read()
+    var datedata: dateData? = readdate()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,6 +42,8 @@ class setting : AppCompatActivity() {
         var first = intent.getBooleanExtra("first",false)
         var makenew = intent.getBooleanExtra("makenew",false)
         var state:String=""
+        var realmhabitdata: RealmResults<allData>? = realm.where<allData>()
+                .findAll()
 
         val mainintent = Intent(this,MainActivity::class.java)
 
@@ -150,6 +153,7 @@ class setting : AppCompatActivity() {
                 achieveButtonswitch(true)
                 editButtonswitch(true)
                 updateWidget()
+                data= read()
             }
         }
 
@@ -168,9 +172,17 @@ class setting : AppCompatActivity() {
                     achieveButtonswitch(false)
                     editButtonswitch(false)
                     state="新たな習慣を設定しました。今度こそ頑張ろう！"
-                    deleteData()
-                    deletedateData()
-                    deletechoicealldata(goal!!,target!!)
+                    if(data?.goal != null) {
+                        deleteData()
+                    }
+                    if(datedata?.habitnumber != null) {
+                        deletedateData()
+                    }
+                    if(realmhabitdata.isNullOrEmpty() == false ) {
+                        if((goal !=null) and (target!=null)) {
+                            deletechoicealldata(goal!!, target!!)
+                        }
+                    }
                     textclean()
                     updateWidget()
                 }
