@@ -42,8 +42,8 @@ class setting : AppCompatActivity() {
         var makenew = intent.getBooleanExtra("makenew",false)
         var state:String=""
 
-
         val mainintent = Intent(this,MainActivity::class.java)
+
 
         if(first){
             texteditable()

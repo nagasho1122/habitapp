@@ -92,6 +92,9 @@ class MainActivity : AppCompatActivity(),  FlexibleCalendarMonthCallback {
         var sharedPref = getSharedPreferences("firstcheck", Context.MODE_PRIVATE)
         var firstlychecking = sharedPref.getBoolean("bool",true)
 
+        //widget更新
+        updateWidget()
+
 
         //データから目的と目標を出力 データがあればDoneボタン押せるようになる
         if (data?.goal != null) {
