@@ -90,7 +90,7 @@
         android:id="@+id/linearLayoutsetting3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="45dp"
+        android:layout_marginTop="38dp"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -107,14 +107,18 @@
 
         <EditText
             android:id="@+id/frequencyText"
+            style="@style/EditTextStyle"
             android:layout_width="80dp"
-            android:layout_height="wrap_content"
+            android:layout_height="60dp"
             android:ems="10"
             android:gravity="center"
             android:hint="0"
             android:inputType="number"
+            android:text="0"
+            android:textColor="@color/changetextcolor"
             android:textColorHint="@color/changeothermonthtext"
-            android:textSize="30sp" />
+            android:textSize="30sp"
+            app:theme="@style/EditTextsrylecursol" />
 
         <TextView
             android:id="@+id/textView"
@@ -149,16 +153,17 @@
 
         <EditText
             android:id="@+id/durationText"
+            style="@style/EditTextStyle"
             android:layout_width="80dp"
-            android:layout_height="wrap_content"
+            android:layout_height="60dp"
             android:layout_weight="1"
             android:ems="10"
             android:gravity="center"
             android:hint="0"
             android:inputType="number"
-            android:textColor="@color/changetextcolor"
             android:textColorHint="@color/changeothermonthtext"
-            android:textSize="30sp" />
+            android:textSize="30sp"
+            android:theme="@style/EditTextsrylecursol" />
 
         <TextView
             android:id="@+id/textView4"

@@ -254,7 +254,7 @@
             android:layout_height="match_parent"
             android:fontFamily="sans-serif-black"
             android:gravity="center"
-            android:text="100"
+            android:text="0"
             android:textColor="@color/changetextcolor"
             android:textSize="30sp" />
 

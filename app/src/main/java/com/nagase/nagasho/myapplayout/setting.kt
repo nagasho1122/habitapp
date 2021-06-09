@@ -13,6 +13,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import com.google.android.material.snackbar.Snackbar
 import io.realm.Realm
 import io.realm.RealmResults
@@ -47,6 +48,7 @@ class setting : AppCompatActivity() {
 
         val mainintent = Intent(this,MainActivity::class.java)
 
+        editTextcolorset()
 
         if(first){
             texteditable()
@@ -154,6 +156,7 @@ class setting : AppCompatActivity() {
                 editButtonswitch(true)
                 updateWidget()
                 data= read()
+                editTextcolorset()
             }
         }
 
@@ -354,6 +357,12 @@ class setting : AppCompatActivity() {
             editButton.isEnabled=false
             editButton.background=getDrawable(R.drawable.background_circle5)
         }
+    }
+    private  fun editTextcolorset(){
+        frequencyText.setTextColor((ContextCompat.getColor(this, R.color.changetextcolor)))
+        durationText.setTextColor((ContextCompat.getColor(this, R.color.changetextcolor)))
+        goalText.setTextColor((ContextCompat.getColor(this, R.color.changetextcolor)))
+        targetText.setTextColor((ContextCompat.getColor(this, R.color.changetextcolor)))
     }
     private fun tutorial(){
         AlertDialog.Builder(this)

@@ -14,4 +14,13 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="EditTextStyle" parent="Widget.AppCompat.EditText">
+        <item name="colorControlNormal">@color/changetextcolor</item>
+        <item name="android:textCursorDrawable">@color/changetextline</item>
+    </style>
+    <style name="EditTextsrylecursol" parent="Widget.MaterialComponents.TimePicker.Display.TextInputEditText">
+        <item name="colorControlActivated">@color/changetextline</item>
+    </style>
+
+
 </resources>

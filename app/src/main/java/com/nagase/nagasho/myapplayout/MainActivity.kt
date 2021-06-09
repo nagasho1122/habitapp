@@ -1,5 +1,6 @@
 package com.nagase.nagasho.myapplayout
 
+import android.app.UiModeManager.MODE_NIGHT_YES
 import android.appwidget.AppWidgetManager
 import android.content.ComponentName
 import android.content.Context
@@ -21,6 +22,7 @@ import java.time.LocalDate
 import java.util.*
 import android.graphics.Color
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import com.google.android.material.snackbar.Snackbar
 import io.realm.RealmResults

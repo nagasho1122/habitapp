@@ -27,4 +27,5 @@
     <color name="changeothermonthtext">#aaffffff</color>
     <color name="changeholeblue">#ff6633</color>
     <color name="changewidgetbackground">#000000</color>
+    <color name="changetextline">#FFBB86FC</color>
 </resources>
