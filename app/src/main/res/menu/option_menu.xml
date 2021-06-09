@@ -7,6 +7,11 @@
         android:title="ヘルプ"
         app:showAsAction="always" />
     <item
+        android:id="@+id/dataicon"
+        android:icon="@drawable/glaphicon"
+        android:title="データ"
+        app:showAsAction="always" />
+    <item
         android:id="@+id/settingicon"
         android:icon="@drawable/setting"
         android:title="設定"

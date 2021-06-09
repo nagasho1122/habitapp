@@ -5,21 +5,17 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
-import android.graphics.Color.BLACK
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.MotionEvent
-import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import com.google.android.material.snackbar.Snackbar
 import io.realm.Realm
 import io.realm.RealmResults
-import io.realm.kotlin.delete
 import io.realm.kotlin.where
-import io.realm.log.RealmLog.error
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main.topAppBar
 import kotlinx.android.synthetic.main.activity_setting.*
@@ -47,6 +43,7 @@ class setting : AppCompatActivity() {
                 .findAll()
 
         val mainintent = Intent(this,MainActivity::class.java)
+        val checkdata = Intent(this,allDataView::class.java)
 
         editTextcolorset()
 
@@ -105,8 +102,14 @@ class setting : AppCompatActivity() {
 
         topAppBar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
-                R.id.helpiconSetting -> {
+                R.id.helpicondatacheck -> {
                     tutorial()
+                    // Handle favorite icon press
+                    true
+
+                }
+                R.id.dataiconSetting -> {
+                    startActivity(checkdata)
                     // Handle favorite icon press
                     true
 

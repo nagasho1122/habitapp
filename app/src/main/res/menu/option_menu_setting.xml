@@ -2,7 +2,12 @@
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/helpiconSetting"
+        android:id="@+id/dataiconSetting"
+        android:icon="@drawable/glaphicon"
+        android:title="データ"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/helpicondatacheck"
         android:icon="@drawable/helpicon"
         android:title="ヘルプ"
         app:showAsAction="always" />

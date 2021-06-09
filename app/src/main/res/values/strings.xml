@@ -2,4 +2,6 @@
     <string name="app_name">Habit</string>
     <string name="appwidget_text">EXAMPLE</string>
     <string name="add_widget">Add widget</string>
+    <string name="recycler_picture">imgae</string>
+    <string name="text_view">picture</string>
 </resources>

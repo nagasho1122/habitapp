@@ -83,6 +83,7 @@ class MainActivity : AppCompatActivity(),  FlexibleCalendarMonthCallback {
         var datedata: dateData? = readdate()
         val preview = Intent(this, setting::class.java)
         val doneaction = Intent(this, doneaction::class.java)
+        val checkdata = Intent(this,allDataView::class.java)
         var todaydate: LocalDate = LocalDate.now()
         var realmtodaysdata:RealmResults<allData>? = realm.where<allData>()
                     .equalTo("date", todaydate.toString())
@@ -218,6 +219,12 @@ class MainActivity : AppCompatActivity(),  FlexibleCalendarMonthCallback {
             when (menuItem.itemId) {
                 R.id.settingicon -> {
                     startActivity(preview)
+                    // Handle favorite icon press
+                    true
+
+                }
+                R.id.dataicon -> {
+                    startActivity(checkdata)
                     // Handle favorite icon press
                     true
 
