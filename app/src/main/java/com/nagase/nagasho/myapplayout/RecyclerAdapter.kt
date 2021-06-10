@@ -7,11 +7,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.list_item.view.*
 
-class RecyclerAdapter(var goals: Array<String>,var targets: Array<String>,var habitnumbers:Array<String>,var results:Array<String>) : RecyclerView.Adapter<RecyclerAdapter.RecyclerViewHolder>(){
+class RecyclerAdapter(var goals: kotlin.collections.MutableList<String>, var targets: kotlin.collections.MutableList<String>, var themes: kotlin.collections.MutableList<String>, var habitnumbers:kotlin.collections.MutableList<String>, var results:kotlin.collections.MutableList<String>) : RecyclerView.Adapter<RecyclerAdapter.RecyclerViewHolder>(){
 
     class RecyclerViewHolder(val view: View): RecyclerView.ViewHolder(view) {
         val goaldataText = view.goaldataText
         val targetdataText = view.targetdataText
+        val themedataText = view.themedatacardText
         val habitnumberdataText=view.habitnumberdataText
         val resultText=view.resultText
     }
@@ -29,6 +30,7 @@ class RecyclerAdapter(var goals: Array<String>,var targets: Array<String>,var ha
             //it.sampleImg.setImageResource(R.mipmap.ic_launcher_round)
             it.goaldataText.text = goals[position]
             it.targetdataText.text = targets[position]
+            it.themedatacardText.text = themes[position]
             it.habitnumberdataText.text=habitnumbers[position]
             it.resultText.text = results[position]
 

@@ -22,7 +22,7 @@
             android:fontFamily="sans-serif"
             android:text="目的："
             android:textColor="@color/changetextcolor"
-            android:textSize="18sp" />
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/goalwidgetText"
@@ -31,7 +31,7 @@
             android:fontFamily="sans-serif"
             android:text="目的をアプリで設定しよう"
             android:textColor="@color/changetextcolor"
-            android:textSize="18sp" />
+            android:textSize="16sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -47,7 +47,7 @@
             android:fontFamily="sans-serif"
             android:text="目標："
             android:textColor="@color/changetextcolor"
-            android:textSize="18sp" />
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/targetwidgetText"
@@ -56,7 +56,32 @@
             android:fontFamily="sans-serif"
             android:text="目標をアプリで設定しよう"
             android:textColor="@color/changetextcolor"
-            android:textSize="18sp" />
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="280dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/textView15"
+            android:layout_width="75dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:text="テーマ："
+            android:textColor="@color/changetextcolor"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/themewidgetText"
+            android:layout_width="205dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:text="テーマを設定しよう"
+            android:textColor="@color/changetextcolor"
+            android:textSize="16sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -256,7 +281,7 @@
             android:gravity="center"
             android:text="0"
             android:textColor="@color/changetextcolor"
-            android:textSize="30sp" />
+            android:textSize="28sp" />
 
         <TextView
             android:id="@+id/textView16"

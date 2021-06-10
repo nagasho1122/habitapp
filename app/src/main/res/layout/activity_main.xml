@@ -44,7 +44,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif"
-            android:text="目的 :"
+            android:text="目的："
             android:textColor="@color/changetextcolor"
             android:textSize="20sp" />
 
@@ -63,7 +63,7 @@
         android:id="@+id/linearLayoutsetting1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="24dp"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -90,13 +90,40 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayoutsetting1">
+
+        <TextView
+            android:id="@+id/textView6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="テーマ："
+            android:textColor="@color/changetextcolor"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/themedatacardText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/changetextcolor"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/linearLayoutsetting2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="12dp"
         android:gravity="center"
         android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayoutsetting1"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
         tools:layout_editor_absoluteX="16dp">
 
         <TextView
@@ -130,8 +157,9 @@
         android:id="@+id/doneButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="12dp"
         android:background="@drawable/background_circle"
+        android:elevation="2dp"
         android:text="Done"
         android:textColor="@color/changetextcolor"
         android:textSize="18sp"
@@ -149,8 +177,7 @@
         android:translationY="30dp"
         app:fcv_background_color="@color/changebackground"
         app:fcv_calendar_day_text_size="15sp"
-        app:fcv_current_day_background_color="@color/light_blue_200"
-        app:fcv_current_day_text_color="@color/changeholeblue"
+        app:fcv_current_day_background_color="@color/changetextline"
         app:fcv_current_month_other_days_text_color="@color/changeothermonthtext"
         app:fcv_current_month_text_color="@color/changetextcolor"
         app:fcv_next_button="@drawable/forwardcalendar"

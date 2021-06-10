@@ -10,7 +10,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplayout">
-        <activity android:name=".allDataView"></activity>
+        <activity android:name=".allDataView"
+            android:screenOrientation="portrait" />
 
         <receiver android:name=".NewAppWidget">
             <intent-filter>
@@ -22,7 +23,8 @@
                 android:resource="@xml/new_app_widget_info" />
         </receiver>
 
-        <activity android:name=".doneaction" />
+        <activity android:name=".doneaction"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".setting"
             android:screenOrientation="portrait" />

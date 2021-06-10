@@ -86,7 +86,7 @@ class NewAppWidget : AppWidgetProvider() {
             }
         }
     }
-    fun insertData(goal: String, target: String, frequent: String,duration: String,data:String){
+    fun insertData(goal: String, target: String, theme: String, frequent: String,duration: String,data:String){
         realm.executeTransaction{
             var id = realm.where<allData>().max("id")
             var nextId = (id?.toLong() ?:  0)+1
@@ -94,6 +94,7 @@ class NewAppWidget : AppWidgetProvider() {
             realmObject1.date=data
             realmObject1.goal=goal
             realmObject1.target=target
+            realmObject1.theme=theme
             realmObject1.duration=duration
             realmObject1.frequent=frequent
         }
@@ -144,7 +145,7 @@ class NewAppWidget : AppWidgetProvider() {
                         }
 
                         var today: LocalDate = LocalDate.now()
-                        insertData(data!!.goal, data!!.target, data!!.frequent, data!!.duration, today.toString())
+                        insertData(data!!.goal, data!!.target, data!!.theme, data!!.frequent, data!!.duration, today.toString())
                         viewsome.setImageViewResource(R.id.stampView7,R.drawable.stamp1)
                     }
                 }else if((datedata == null) and (data?.goal != null)){
@@ -153,7 +154,7 @@ class NewAppWidget : AppWidgetProvider() {
                     nownum++
                     savenumber(nownum)
                     viewsome.setTextViewText(R.id.habitwidgetNumber,nownum.toString())
-                    insertData(data!!.goal, data!!.target, data!!.frequent, data!!.duration, today.toString())
+                    insertData(data!!.goal, data!!.target,data!!.theme,  data!!.frequent, data!!.duration, today.toString())
                     viewsome.setImageViewResource(R.id.stampView7,R.drawable.stamp1)
                 }
 
@@ -274,6 +275,11 @@ internal fun updateAppWidget(
         viewsome.setTextViewText(R.id.targetwidgetText, data.target)
     } else {
         viewsome.setTextViewText(R.id.targetwidgetText, "目標をアプリで設定しよう")
+    }
+    if (data?.theme != null) {
+        viewsome.setTextViewText(R.id.themewidgetText, data.theme)
+    } else {
+        viewsome.setTextViewText(R.id.targetwidgetText, "テーマを設定しよう")
     }
     if (datedata != null) {
         viewsome.setTextViewText(R.id.habitwidgetNumber, datedata.habitnumber.toString())

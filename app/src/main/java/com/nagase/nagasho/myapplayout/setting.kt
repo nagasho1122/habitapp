@@ -15,6 +15,7 @@ import androidx.core.content.ContextCompat
 import com.google.android.material.snackbar.Snackbar
 import io.realm.Realm
 import io.realm.RealmResults
+import io.realm.kotlin.createObject
 import io.realm.kotlin.where
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main.topAppBar
@@ -34,6 +35,7 @@ class setting : AppCompatActivity() {
 
         var goal = data?.goal
         var target = data?.target
+        var theme = data?.theme
         var frequent = data?.frequent
         var duration = data?.duration
         var first = intent.getBooleanExtra("first",false)
@@ -96,6 +98,7 @@ class setting : AppCompatActivity() {
         if (goal != null) {
             targetText.setText(target)
             goalText.setText(goal)
+            themeEditText.setText(theme)
             frequencyText.setText(frequent)
             durationText.setText(duration)
         }
@@ -109,6 +112,7 @@ class setting : AppCompatActivity() {
 
                 }
                 R.id.dataiconSetting -> {
+                    checkdata.putExtra("backstatus","seeting")
                     startActivity(checkdata)
                     // Handle favorite icon press
                     true
@@ -140,9 +144,10 @@ class setting : AppCompatActivity() {
         decideButton.setOnClickListener{
             var editgoal = goalText.text.toString1()
             var edittarget=targetText.text.toString1()
+            var edittheme= themeEditText.text.toString1()
             var editfrequent=frequencyText.text.toString()
             var editduration = durationText.text.toString()
-            if(editgoal.isNullOrBlank() or edittarget.isNullOrBlank() or editfrequent.isNullOrBlank() or editduration.isNullOrBlank()){
+            if(editgoal.isNullOrBlank() or edittarget.isNullOrBlank() or editfrequent.isNullOrBlank() or edittheme.isNullOrBlank() or editduration.isNullOrBlank()){
                 AlertDialog.Builder(this)
                     .setTitle("空欄があります")
                     .setMessage("必要な項目をすべて入力してください。")
@@ -151,7 +156,7 @@ class setting : AppCompatActivity() {
                     }
                     .show()
             }else {
-                save(editgoal, edittarget, editfrequent, editduration, state)
+                save(editgoal, edittarget, edittheme, editfrequent, editduration, state)
                 nottexteditable()
                 decideButtonswitch(false)
                 failButtonswitch(true)
@@ -179,14 +184,17 @@ class setting : AppCompatActivity() {
                     editButtonswitch(false)
                     state="新たな習慣を設定しました。今度こそ頑張ろう！"
                     if(data?.goal != null) {
+                        if(datedata?.habitnumber != null) {
+                            savecarddata(goalText.text.toString1(),targetText.text.toString1(),themeEditText.text.toString1(),datedata!!.habitnumber.toString(),"faiure")
+                        }
                         deleteData()
                     }
                     if(datedata?.habitnumber != null) {
                         deletedateData()
                     }
                     if(realmhabitdata.isNullOrEmpty() == false ) {
-                        if((goal !=null) and (target!=null)) {
-                            deletechoicealldata(goal!!, target!!)
+                        if((goal !=null) and (target!=null) and (theme != null)) {
+                            deletechoicealldata(goal!!, target!!,theme!!)
                         }
                     }
                     textclean()
@@ -204,6 +212,11 @@ class setting : AppCompatActivity() {
                 }
                 .setPositiveButton("はい") { dialog, which ->
                     // Respond to positive button press
+                    if(datedata?.habitnumber != null) {
+                        savecarddata(goalText.text.toString1(), targetText.text.toString1(), themeEditText.text.toString1(), datedata!!.habitnumber.toString(), "success")
+                    }else {
+                        savecarddata(goalText.text.toString1(), targetText.text.toString1(), themeEditText.text.toString1(), "0", "success")
+                    }
                     texteditable()
                     textclean()
                     deleteData()
@@ -252,8 +265,10 @@ class setting : AppCompatActivity() {
     fun readdate(): dateData? {
         return realm.where(dateData::class.java).findFirst()
     }
-
-    fun save(goal: String, target: String, frequent: String,duration: String,text: String){
+    fun readcarddata(): cardData? {
+        return realm.where(cardData::class.java).findFirst()
+    }
+    fun save(goal: String, target: String, theme:String, frequent: String,duration: String,text: String){
         val data: Data? = read()
 
         realm.executeTransaction {
@@ -261,18 +276,33 @@ class setting : AppCompatActivity() {
             if (data != null) {
                 data.goal = goal
                 data.target = target
+                data.theme = theme
                 data.frequent = frequent
                 data.duration = duration
             } else {
                 val newdata: Data = it.createObject(Data::class.java) //保存するデータの新規作成
                 newdata.goal = goal
                 newdata.target = target
+                newdata.theme = theme
                 newdata.frequent = frequent
                 newdata.duration = duration
             }
 
             Snackbar.make(buttons,text, Snackbar.LENGTH_SHORT).show() //表示する長さ等の設定
         }
+    }
+    fun savecarddata(goal: String, target: String, theme:String, number: String,result: String){
+        realm.executeTransaction{
+            var id = realm.where<cardData>().max("id")
+            var nextId = (id?.toLong() ?:  0)+1
+            var realmObject1 = realm.createObject<cardData>(nextId)
+            realmObject1.goal=goal
+            realmObject1.target=target
+            realmObject1.theme=theme
+            realmObject1.number=number
+            realmObject1.result=result
+        }
+        Log.d("あああああああ","result:${realm.where<cardData>().findAll()}")
     }
     fun deleteData(){
         realm.beginTransaction()
@@ -287,11 +317,12 @@ class setting : AppCompatActivity() {
         target2.deleteAllFromRealm()
         realm.commitTransaction()
     }
-    fun deletechoicealldata(choicegoal:String,choicetarget:String){
+    fun deletechoicealldata(choicegoal:String,choicetarget:String,choicetheme:String){
         realm.beginTransaction()
         var target3 = realm.where<allData>()
                 .equalTo("goal",choicegoal)
                 .equalTo("target",choicetarget)
+                .equalTo("theme",choicetheme)
                 .findAll()
         target3.deleteAllFromRealm()
         realm.commitTransaction()
@@ -299,18 +330,21 @@ class setting : AppCompatActivity() {
     private fun texteditable(){
         targetText.isEnabled= true
         goalText.isEnabled= true
+        themeEditText.isEnabled=true
         frequencyText.isEnabled= true
         durationText.isEnabled= true
     }
     private fun textclean(){
         targetText.setText("")
         goalText.setText("")
+        themeEditText.setText("")
         frequencyText.setText("")
         durationText.setText("")
     }
     private fun nottexteditable(){
         targetText.isEnabled= false
         goalText.isEnabled= false
+        themeEditText.isEnabled=false
         frequencyText.isEnabled= false
         durationText.isEnabled= false
         targetText.setTextColor(Color.BLACK)
@@ -363,6 +397,7 @@ class setting : AppCompatActivity() {
     }
     private  fun editTextcolorset(){
         frequencyText.setTextColor((ContextCompat.getColor(this, R.color.changetextcolor)))
+        themeEditText.setTextColor((ContextCompat.getColor(this, R.color.changetextcolor)))
         durationText.setTextColor((ContextCompat.getColor(this, R.color.changetextcolor)))
         goalText.setTextColor((ContextCompat.getColor(this, R.color.changetextcolor)))
         targetText.setTextColor((ContextCompat.getColor(this, R.color.changetextcolor)))
@@ -376,6 +411,7 @@ class setting : AppCompatActivity() {
                     |
                     |目的:健康になる
                     |目標:腹筋バキバキ
+                    |テーマ：腹筋100回
                     """.trimMargin())
                 .setPositiveButton("次へ") { dialog, which ->
                     // Respond to positive button press

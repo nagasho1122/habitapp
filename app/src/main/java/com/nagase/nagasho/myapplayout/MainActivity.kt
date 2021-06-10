@@ -1,6 +1,5 @@
 package com.nagase.nagasho.myapplayout
 
-import android.app.UiModeManager.MODE_NIGHT_YES
 import android.appwidget.AppWidgetManager
 import android.content.ComponentName
 import android.content.Context
@@ -20,15 +19,12 @@ import kotlinx.android.synthetic.main.activity_main.topAppBar
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.util.*
-import android.graphics.Color
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import com.google.android.material.snackbar.Snackbar
 import io.realm.RealmResults
 import io.realm.Sort
 import kotlinx.android.synthetic.main.activity_setting.*
-import kotlinx.android.synthetic.main.new_app_widget.*
 import net.soft.vrg.flexiblecalendar.CalendarDay
 import net.soft.vrg.flexiblecalendar.FlexibleCalendarView
 import net.soft.vrg.flexiblecalendar.calendar_listeners.FlexibleCalendarMonthCallback
@@ -103,10 +99,12 @@ class MainActivity : AppCompatActivity(),  FlexibleCalendarMonthCallback {
         if (data?.goal != null) {
             textView2.text = data.target
             textView3.text = data.goal
+            themedatacardText.text=data.theme
             doneButtonswitch(true)
         } else {
             textView2.text ="目的を設定しよう"
             textView3.text = "目標を設定しよう"
+            themedatacardText.text="テーマを設定しよう"
             doneButtonswitch(false)
         }
 
@@ -123,7 +121,7 @@ class MainActivity : AppCompatActivity(),  FlexibleCalendarMonthCallback {
                     .setPositiveButton("次へ") { dialog, which ->
                         // Respond to positive button press
                         AlertDialog.Builder(this)
-                                .setTitle("次へ")
+                                .setTitle("チュートリアル")
                                 .setMessage("""
                     |初めに目標、目的等を設定する画面に移ります。
                     |設定画面は右上の歯車アイコンからも飛ぶことができます。
@@ -205,10 +203,11 @@ class MainActivity : AppCompatActivity(),  FlexibleCalendarMonthCallback {
                 habitNumber.text=nownum.toString()
                 if(data!!.duration.toInt() == nownum){
                     achieven = true
+                    savecarddata(data!!.goal, data!!.target, data!!.theme,nownum.toString(),"success")
                 }
             }
             var today: LocalDate = LocalDate.now()
-            insertData(data!!.goal, data!!.target, data!!.frequent, data!!.duration, today.toString())
+            insertData(data!!.goal, data!!.target, data!!.theme, data!!.frequent, data!!.duration, today.toString())
             doneButtonswitch(false)
             updateWidget()
             doneaction.putExtra("achieven",achieven)
@@ -224,6 +223,7 @@ class MainActivity : AppCompatActivity(),  FlexibleCalendarMonthCallback {
 
                 }
                 R.id.dataicon -> {
+                    checkdata.putExtra("backstatus","main")
                     startActivity(checkdata)
                     // Handle favorite icon press
                     true
@@ -282,6 +282,9 @@ class MainActivity : AppCompatActivity(),  FlexibleCalendarMonthCallback {
     fun readdate(): dateData? {
         return realm.where(dateData::class.java).findFirst()
     }
+    fun readcarddata(): cardData? {
+        return realm.where(cardData::class.java).findFirst()
+    }
     fun readfrequencydata(): frequencycheck? {
         return realm.where(frequencycheck::class.java).findFirst()
     }
@@ -311,7 +314,7 @@ class MainActivity : AppCompatActivity(),  FlexibleCalendarMonthCallback {
             }
         }
     }
-    fun insertData(goal: String, target: String, frequent: String,duration: String,data:String){
+    fun insertData(goal: String, target: String, theme: String, frequent: String,duration: String,data:String){
         realm.executeTransaction{
             var id = realm.where<allData>().max("id")
             var nextId = (id?.toLong() ?:  0)+1
@@ -319,11 +322,26 @@ class MainActivity : AppCompatActivity(),  FlexibleCalendarMonthCallback {
                     realmObject1.date=data
                     realmObject1.goal=goal
                     realmObject1.target=target
+                    realmObject1.theme=theme
                     realmObject1.duration=duration
                     realmObject1.frequent=frequent
         }
         Log.d("Realminsert","result:${realm.where<allData>().findAll()}")
-    }fun updateWidget(){
+    }
+    fun savecarddata(goal: String, target: String, theme:String, number: String,result: String){
+        realm.executeTransaction{
+            var id = realm.where<cardData>().max("id")
+            var nextId = (id?.toLong() ?:  0)+1
+            var realmObject1 = realm.createObject<cardData>(nextId)
+            realmObject1.goal=goal
+            realmObject1.target=target
+            realmObject1.theme=theme
+            realmObject1.number=number
+            realmObject1.result=result
+        }
+        Log.d("あああああああ","result:${realm.where<cardData>().findAll()}")
+    }
+    fun updateWidget(){
         val intent = Intent(this,NewAppWidget::class.java)
         intent.action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
         val ids = AppWidgetManager.getInstance(applicationContext)

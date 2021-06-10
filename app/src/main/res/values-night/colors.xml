@@ -28,4 +28,7 @@
     <color name="changeholeblue">#ff6633</color>
     <color name="changewidgetbackground">#000000</color>
     <color name="changetextline">#FFBB86FC</color>
+    <color name="changecurentdaybackground">#faa781</color>
+    <color name="changedatabackground">#434141</color>
+    <color name="changecardbackground">#292828</color>
 </resources>

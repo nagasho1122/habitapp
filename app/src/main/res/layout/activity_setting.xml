@@ -41,7 +41,7 @@
         android:layout_marginEnd="45dp"
         android:hint="目的"
         app:counterEnabled="true"
-        app:counterMaxLength="26"
+        app:counterMaxLength="16"
         app:errorEnabled="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -54,7 +54,7 @@
             android:layout_height="wrap_content"
             android:maxLines="2"
             android:textColor="@color/changetextcolor"
-            android:textSize="20sp" />
+            android:textSize="18sp" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -64,11 +64,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="45dp"
-        android:layout_marginTop="45dp"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="45dp"
         android:hint="目標"
         app:counterEnabled="true"
-        app:counterMaxLength="26"
+        app:counterMaxLength="16"
         app:errorEnabled="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -82,7 +82,34 @@
             android:layout_height="wrap_content"
             android:maxLines="2"
             android:textColor="@color/changetextcolor"
-            android:textSize="20sp" />
+            android:textSize="18sp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textField3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="45dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="45dp"
+        android:hint="テーマ"
+        app:counterEnabled="true"
+        app:counterMaxLength="16"
+        app:errorEnabled="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textField2"
+        app:suffixTextColor="@color/changetextcolor"
+        tools:ignore="MissingConstraints">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/themeEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLines="2"
+            android:textColor="@color/changetextcolor"
+            android:textSize="18sp" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -90,11 +117,11 @@
         android:id="@+id/linearLayoutsetting3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="38dp"
+        android:layout_marginTop="24dp"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textField2">
+        app:layout_constraintTop_toBottomOf="@+id/textField3">
 
         <TextView
             android:id="@+id/themeSettingMokuteki"
@@ -103,21 +130,21 @@
             android:fontFamily="sans-serif"
             android:text="習慣頻度 : "
             android:textColor="@color/changetextcolor"
-            android:textSize="30sp" />
+            android:textSize="24sp" />
 
         <EditText
             android:id="@+id/frequencyText"
             style="@style/EditTextStyle"
-            android:layout_width="80dp"
-            android:layout_height="60dp"
+            android:layout_width="70dp"
+            android:layout_height="50dp"
             android:ems="10"
             android:gravity="center"
             android:hint="0"
             android:inputType="number"
-            android:text="0"
+            android:maxLength="3"
             android:textColor="@color/changetextcolor"
             android:textColorHint="@color/changeothermonthtext"
-            android:textSize="30sp"
+            android:textSize="24sp"
             app:theme="@style/EditTextsrylecursol" />
 
         <TextView
@@ -135,7 +162,7 @@
         android:id="@+id/linearLayoutsetting4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="45dp"
+        android:layout_marginTop="24dp"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -149,20 +176,20 @@
             android:fontFamily="sans-serif"
             android:text="目標回数 : "
             android:textColor="@color/changetextcolor"
-            android:textSize="30sp" />
+            android:textSize="24sp" />
 
         <EditText
             android:id="@+id/durationText"
             style="@style/EditTextStyle"
-            android:layout_width="80dp"
-            android:layout_height="60dp"
-            android:layout_weight="1"
+            android:layout_width="70dp"
+            android:layout_height="50dp"
             android:ems="10"
             android:gravity="center"
             android:hint="0"
             android:inputType="number"
+            android:maxLength="4"
             android:textColorHint="@color/changeothermonthtext"
-            android:textSize="30sp"
+            android:textSize="24sp"
             android:theme="@style/EditTextsrylecursol" />
 
         <TextView

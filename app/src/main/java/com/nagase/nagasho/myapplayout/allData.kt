@@ -11,6 +11,7 @@ open class allData : RealmObject() {//データ出力時に使うクラス。Don
     @Required
     var target: String = ""
     var goal: String =""
+    var theme: String=""
     var frequent: String =""
     var duration: String =""
     var date: String=""
