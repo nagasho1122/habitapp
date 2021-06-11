@@ -195,6 +195,7 @@ class MainActivity : AppCompatActivity(),  FlexibleCalendarMonthCallback {
                 habitNumber.text=nownum.toString()
                 if(data!!.duration.toInt() == nownum){
                     achieven = true
+                    savecarddata(data!!.goal, data!!.target, data!!.theme,nownum.toString(),"success")
                 }
             }else{
                 var nownum : Int =0
@@ -339,7 +340,6 @@ class MainActivity : AppCompatActivity(),  FlexibleCalendarMonthCallback {
             realmObject1.number=number
             realmObject1.result=result
         }
-        Log.d("あああああああ","result:${realm.where<cardData>().findAll()}")
     }
     fun updateWidget(){
         val intent = Intent(this,NewAppWidget::class.java)

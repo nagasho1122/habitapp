@@ -302,7 +302,6 @@ class setting : AppCompatActivity() {
             realmObject1.number=number
             realmObject1.result=result
         }
-        Log.d("あああああああ","result:${realm.where<cardData>().findAll()}")
     }
     fun deleteData(){
         realm.beginTransaction()

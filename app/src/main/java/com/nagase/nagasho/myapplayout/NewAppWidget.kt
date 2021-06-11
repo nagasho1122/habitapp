@@ -10,6 +10,7 @@ import android.os.Build
 import android.util.Log
 import android.widget.RemoteViews
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AlertDialog
 import io.realm.Realm
 import io.realm.RealmResults
 import io.realm.Sort
@@ -98,7 +99,31 @@ class NewAppWidget : AppWidgetProvider() {
             realmObject1.duration=duration
             realmObject1.frequent=frequent
         }
-        Log.d("Realminsert","result:${realm.where<allData>().findAll()}")
+    }
+    fun deleteData(){
+        realm.beginTransaction()
+        var target = realm.where<Data>().findAll()
+        target.deleteAllFromRealm()
+        Log.d("RealmDelete", "deletePartRealm:${realm.where<Data>().findAll()}")
+        realm.commitTransaction()
+    }
+    fun deletedateData(){
+        realm.beginTransaction()
+        var target2 = realm.where<dateData>().findAll()
+        target2.deleteAllFromRealm()
+        realm.commitTransaction()
+    }
+    fun savecarddata(goal: String, target: String, theme:String, number: String,result: String){
+        realm.executeTransaction{
+            var id = realm.where<cardData>().max("id")
+            var nextId = (id?.toLong() ?:  0)+1
+            var realmObject1 = realm.createObject<cardData>(nextId)
+            realmObject1.goal=goal
+            realmObject1.target=target
+            realmObject1.theme=theme
+            realmObject1.number=number
+            realmObject1.result=result
+        }
     }
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onReceive(context: Context?, intent: Intent?) {
@@ -119,8 +144,10 @@ class NewAppWidget : AppWidgetProvider() {
                 var realmhabitdata:RealmResults<allData>? = realm.where<allData>()
                         .findAll()
                 var sortdata = realmhabitdata?.sort("id",Sort.DESCENDING)
-                var frequencychecking:frequencycheck? = readfrequencydata()
                 savecheck(true)
+                var frequencychecking:frequencycheck? = readfrequencydata()
+
+
 
                 if(realmhabitdata.isNullOrEmpty() == false && sortdata.isNullOrEmpty() == false){
                     var latesthabitdata = sortdata[0]
@@ -132,21 +159,40 @@ class NewAppWidget : AppWidgetProvider() {
 
                 if (realmtodaysdata?.size == 0 ){
                     if(frequencychecking?.check != false){
+                        var achievecheck = false
                         if(datedata != null) {
                             var nownum : Int =datedata.habitnumber
                             nownum++
                             savenumber(nownum)
                             viewsome.setTextViewText(R.id.habitwidgetNumber,nownum.toString())
+                            if(data!!.duration.toInt() <= nownum){
+                                savecarddata(data!!.goal, data!!.target, data!!.theme,nownum.toString(),"success")
+                                viewsome.setTextViewText(R.id.goalwidgetText,"　目標回数を達成しました。")
+                                viewsome.setTextViewText(R.id.themewidgetText,"を設定しましょう。")
+                                viewsome.setTextViewText(R.id.targetwidgetText,"　アプリを開いて新しい習慣")
+                                achievecheck = true
+                            }
                         }else{
                             var nownum : Int =0
                             nownum++
                             savenumber(nownum)
                             viewsome.setTextViewText(R.id.habitwidgetNumber,nownum.toString())
+                            if(data!!.duration.toInt() <= nownum){
+                                savecarddata(data!!.goal, data!!.target, data!!.theme,nownum.toString(),"success")
+                                viewsome.setTextViewText(R.id.goalwidgetText,"　目標回数を達成しました。")
+                                viewsome.setTextViewText(R.id.themewidgetText,"を設定しましょう。")
+                                viewsome.setTextViewText(R.id.targetwidgetText,"　アプリを開いて新しい習慣")
+                                achievecheck = true
+                            }
                         }
 
                         var today: LocalDate = LocalDate.now()
                         insertData(data!!.goal, data!!.target, data!!.theme, data!!.frequent, data!!.duration, today.toString())
                         viewsome.setImageViewResource(R.id.stampView7,R.drawable.stamp1)
+                        if(achievecheck){
+                            deleteData()
+                            deletedateData()
+                        }
                     }
                 }else if((datedata == null) and (data?.goal != null)){
                     var nownum : Int =0
@@ -155,6 +201,14 @@ class NewAppWidget : AppWidgetProvider() {
                     savenumber(nownum)
                     viewsome.setTextViewText(R.id.habitwidgetNumber,nownum.toString())
                     insertData(data!!.goal, data!!.target,data!!.theme,  data!!.frequent, data!!.duration, today.toString())
+                    if(data!!.duration.toInt() <= nownum){
+                        savecarddata(data!!.goal, data!!.target, data!!.theme,nownum.toString(),"success")
+                        deletedateData()
+                        deleteData()
+                        viewsome.setTextViewText(R.id.goalwidgetText,"　目標回数を達成しました。")
+                        viewsome.setTextViewText(R.id.themewidgetText,"を設定しましょう。")
+                        viewsome.setTextViewText(R.id.targetwidgetText,"　アプリを開いて新しい習慣")
+                    }
                     viewsome.setImageViewResource(R.id.stampView7,R.drawable.stamp1)
                 }
 
@@ -279,7 +333,7 @@ internal fun updateAppWidget(
     if (data?.theme != null) {
         viewsome.setTextViewText(R.id.themewidgetText, data.theme)
     } else {
-        viewsome.setTextViewText(R.id.targetwidgetText, "テーマを設定しよう")
+        viewsome.setTextViewText(R.id.themewidgetText, "テーマを設定しよう")
     }
     if (datedata != null) {
         viewsome.setTextViewText(R.id.habitwidgetNumber, datedata.habitnumber.toString())
