@@ -37,6 +37,10 @@ class allDataView : AppCompatActivity() {
                     true
 
                 }
+                R.id.settingicondataview -> {
+                    startActivity(settingintent)
+                    true
+                }
                 else -> false
             }
         }
@@ -66,7 +70,11 @@ class allDataView : AppCompatActivity() {
                 targetofData.add(data.target)
                 themeofData.add(data.theme)
                 habitnumberofData.add(data.number)
-                resultofData.add(data.result)
+                if(data.result=="success") {
+                    resultofData.add("成功！！")
+                }else{
+                    resultofData.add("失敗..")
+                }
             }
         }else {
             goalofData.add("記録なし")
